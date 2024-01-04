@@ -1,6 +1,6 @@
 # 7dmap
 
-This template should help get you started developing with Vue 3 in Vite.
+7日杀地图查看器（桌面版）
 
 ## Recommended IDE Setup
 

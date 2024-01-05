@@ -15,6 +15,9 @@ const children = ref([])
 
 const down = ref(false)
 
+const arrX = []
+const arrY = []
+
 const onmousemove = (e)=>{
   if(down.value){
     //对拖拽行为的限制
@@ -38,39 +41,28 @@ const onmouseup = ()=>{
 
 const wheel = (e)=>{
   if(e.deltaY < -1){ //滚轮向上
-    w.value += w.value>1000? 100:50
-    h.value += h.value>1000? 100:50
-    left.value -= e.offsetX/w.value * (w.value>1000? 100:50)
-    top.value -= e.offsetY/h.value * (h.value>1000? 100:50)
+    w.value += 50
+    h.value += 50
+    left.value -= e.offsetX/w.value * 50
+    top.value -= e.offsetY/h.value * 50
   }else if(e.deltaY > 1){ //滚轮向下
     //if(h.value<=400) return    //对缩放行为的限制
-    w.value -= w.value>1000? 100:50
-    h.value -= h.value>1000? 100:50
-    left.value += e.offsetX/w.value * (w.value>1000? 100:50)
-    top.value += e.offsetY/h.value * (h.value>1000? 100:50)
+    w.value -= 50
+    h.value -= 50
+    left.value += e.offsetX/w.value * 50
+    top.value += e.offsetY/h.value * 50
   }
   //console.log(e)
   for (const index in children.value) {
-    children.value[index].style = {
-      width: '10px',
-      height: '10px',
-      backgroundColor: 'blue',
-      position: 'absolute',
-      top: `${Math.random() * h.value}px`,
-      left: `${Math.random() * w.value}px`,
-    }
+    children.value[index].style.left = `${arrX[index]*w.value/400}px`
+
+    children.value[index].style.top = `${arrY[index]*h.value/400}px`
+
   }
 }
 
 const onclick = (e)=>{
-children.value.push({style:{
-    width: '10px',
-    height: '10px',
-    backgroundColor: 'blue',
-    position: 'absolute',
-    top: `${Math.random() * 400}px`,
-    left: `${Math.random() * 400}px`,
-  }})
+
 }
 
 watch(w,(new_w)=>{
@@ -78,15 +70,20 @@ watch(w,(new_w)=>{
 
 })
 
+
 onMounted(()=>{
-  for (let i = 0; i <100; i++) {
+  for (let i = 0; i < 50; i++) {
+    arrX.push(Math.random()*400)
+    arrY.push(Math.random()*400)
+  }
+  for (let i = 0; i < 50; i++) {
     children.value.push({style:{
         width: '10px',
         height: '10px',
         backgroundColor: 'blue',
         position: 'absolute',
-        top: `${Math.random() * 400}px`,
-        left: `${Math.random() * 400}px`,
+        top: `${arrY[i]}px`,
+        left: `${arrX[i]}px`,
       }})
   }
 })

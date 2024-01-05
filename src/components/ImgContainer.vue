@@ -1,6 +1,6 @@
 <script setup>
 
-import {ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 
 const img = ref(null)
 const canvas = ref(null)
@@ -9,7 +9,8 @@ const w = ref(400)
 const h = ref(400)
 const left = ref(0)
 const top = ref(0)
-
+const div1 = ref(null)
+const children = ref([])
 
 
 const down = ref(false)
@@ -37,28 +38,62 @@ const onmouseup = ()=>{
 
 const wheel = (e)=>{
   if(e.deltaY < -1){ //滚轮向上
-    w.value += 50
-    h.value += 50
-    left.value -= e.offsetX/w.value * 50
-    console.log(e.offsetX/w.value * 50)
-    top.value -= e.offsetY/h.value * 50
+    w.value += w.value>1000? 100:50
+    h.value += h.value>1000? 100:50
+    left.value -= e.offsetX/w.value * (w.value>1000? 100:50)
+    top.value -= e.offsetY/h.value * (h.value>1000? 100:50)
   }else if(e.deltaY > 1){ //滚轮向下
     //if(h.value<=400) return    //对缩放行为的限制
-    w.value -= 50
-    h.value -= 50
-    left.value += e.offsetX/w.value * 50
-    top.value += e.offsetY/h.value *50
+    w.value -= w.value>1000? 100:50
+    h.value -= h.value>1000? 100:50
+    left.value += e.offsetX/w.value * (w.value>1000? 100:50)
+    top.value += e.offsetY/h.value * (h.value>1000? 100:50)
   }
   //console.log(e)
+  for (const index in children.value) {
+    children.value[index].style = {
+      width: '10px',
+      height: '10px',
+      backgroundColor: 'blue',
+      position: 'absolute',
+      top: `${Math.random() * h.value}px`,
+      left: `${Math.random() * w.value}px`,
+    }
+  }
 }
 
 const onclick = (e)=>{
-  console.log(e)
-  // console.log(img.value.width)
-  const ctx = canvas.value.getContext('2d');
-  // 在canvas上绘制一个矩形
-  ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
-  ctx.fillRect(50, 50, 100, 100);
+children.value.push({style:{
+    width: '10px',
+    height: '10px',
+    backgroundColor: 'blue',
+    position: 'absolute',
+    top: `${Math.random() * 400}px`,
+    left: `${Math.random() * 400}px`,
+  }})
+}
+
+watch(w,(new_w)=>{
+
+
+})
+
+onMounted(()=>{
+  for (let i = 0; i <100; i++) {
+    children.value.push({style:{
+        width: '10px',
+        height: '10px',
+        backgroundColor: 'blue',
+        position: 'absolute',
+        top: `${Math.random() * 400}px`,
+        left: `${Math.random() * 400}px`,
+      }})
+  }
+})
+
+const onmouseover = (e)=>{
+  //console.log(e.target)
+  console.log(e.target.getAttribute('text'))
 }
 
 </script>
@@ -69,15 +104,29 @@ const onclick = (e)=>{
   @mousedown.prevent="onmousedown" @mouseup="onmouseup" @mousemove="onmousemove" @wheel="wheel" @click="onclick">
 
 
-    <img src="@/assets/1.jpg" ref="img"
+    <img src="@/assets/2.png" ref="img"
          style="object-fit: fill; position: absolute; z-index: 1;"
          :style="{width: w + 'px', height: h + 'px', left: left + 'px', top: top + 'px'}"
     />
     <canvas ref="canvas"
+            :width="w" :height="h"
             style="position: absolute; background: transparent; z-index: 2;"
-            :style="{width: w + 'px', height: h + 'px', left: left + 'px', top: top + 'px'}">
+            :style="{ left: left + 'px', top: top + 'px'}">
 
     </canvas>
+
+    <div ref="div1" style="position: absolute; background-color: rgba(255,255,0,0.4); z-index: 3"
+      :style="{width: w+'px', height: h+'px', left: left + 'px', top: top + 'px'}"
+    >
+      <div
+      v-for="(child, index) in children"
+      :key = "index"
+      :style="child.style"
+      @mouseover="onmouseover"
+      text = "你好"
+      />
+
+    </div>
 
 
 

@@ -2,11 +2,13 @@
   "name": "7dmap",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
+  "main": "electron/main.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "nodemon --exec electron . --watch ./ --ext .js,.html,.vue,.css",
+    "elec-build": "electron-builder"
   },
   "dependencies": {
     "pinia": "^2.1.7",
@@ -14,6 +16,38 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.5.2",
+    "electron": "^28.1.2",
+    "electron-builder": "^24.9.1",
     "vite": "^5.0.10"
+  },
+  "build": {
+    "appId": "com.zzy77.7dmap",
+    "productName": "XmTool",
+    "directories": {
+      "output": "build"
+    },
+    "files": [
+      "dist/**/*",
+      "public/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "extraFiles": [
+      {
+        "from": "src/assets",
+        "to": "assets",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "src/assets/favicon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   }
 }

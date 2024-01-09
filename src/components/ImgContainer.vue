@@ -1,14 +1,15 @@
 <script setup>
-
+import configs from "@/configs";
 import {onMounted, ref, watch} from "vue";
 
 const img = ref(null)
 const canvas = ref(null)
 
-const w = ref(400)
-const h = ref(400)
+const w = ref(configs.containerWidth)
+const h = ref(configs.containerHeight)
 const left = ref(0)
 const top = ref(0)
+const zoomStep = configs.zoomStep
 const div1 = ref(null)
 const children = ref([])
 
@@ -21,10 +22,10 @@ const arrY = []
 const onmousemove = (e)=>{
   if(down.value){
     //对拖拽行为的限制
-    // if(left.value>=0 && e.movementX>0 ) return;
-    // if(left.value + w.value <= 400 && e.movementX<0) return;
-    // if(top.value>=0 && e.movementY>0 ) return;
-    // if(top.value + h.value <= 400 && e.movementY<0) return;
+    if(left.value>= configs.containerWidth -100 && e.movementX>0 ) return;
+    if(left.value + w.value <= 100 && e.movementX<0) return;
+    if(top.value>= configs.containerWidth -100 && e.movementY>0 ) return;
+    if(top.value + h.value <= 100 && e.movementY<0) return;
     left.value += e.movementX
     top.value += e.movementY
   }
@@ -41,16 +42,16 @@ const onmouseup = ()=>{
 
 const wheel = (e)=>{
   if(e.deltaY < -1){ //滚轮向上
-    w.value += 50
-    h.value += 50
-    left.value -= e.offsetX/w.value * 50
-    top.value -= e.offsetY/h.value * 50
+    w.value += zoomStep
+    h.value += zoomStep
+    left.value -= e.offsetX/w.value * zoomStep
+    top.value -= e.offsetY/h.value * zoomStep
   }else if(e.deltaY > 1){ //滚轮向下
-    //if(h.value<=400) return    //对缩放行为的限制
-    w.value -= 50
-    h.value -= 50
-    left.value += e.offsetX/w.value * 50
-    top.value += e.offsetY/h.value * 50
+    if(h.value<=400) return    //对缩放行为的限制
+    w.value -= zoomStep
+    h.value -= zoomStep
+    left.value += e.offsetX/w.value * zoomStep
+    top.value += e.offsetY/h.value * zoomStep
   }
   //console.log(e)
   for (const index in children.value) {
@@ -93,12 +94,16 @@ const onmouseover = (e)=>{
   console.log(e.target.getAttribute('text'))
 }
 
+const onmouseout = (e)=>{
+  down.value = false
+}
+
 </script>
 
 <template>
-  <div>图片容器组件</div>
-  <div style="height: 400px; width: 400px; background-color: #c9c9c9; border: 2px solid black; overflow: hidden; position: relative; "
-  @mousedown.prevent="onmousedown" @mouseup="onmouseup" @mousemove="onmousemove" @wheel="wheel" @click="onclick">
+  <div style=" background-color: #c9c9c9; border: 2px solid black; overflow: hidden; position: relative;"
+       :style="{width: configs.containerWidth + 'px', height: configs.containerHeight + 'px'}"
+  @mousedown.prevent="onmousedown" @mouseup="onmouseup" @mousemove="onmousemove" @wheel="wheel" @click="onclick" @mouseout="onmouseout">
 
 
     <img src="@/assets/2.png" ref="img"

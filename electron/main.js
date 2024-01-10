@@ -1,7 +1,15 @@
 const {app, BrowserWindow, ipcMain} = require('electron')
 const path = require('path')
+const os = require('os')
+const fs = require('fs')
+const {getPoints, processImg} = require('./service/service')
 
-const env = 'dev'
+
+const env = ''
+const resPath = env === 'dev'? 'src/res/': '../../../res/'
+const userhome = os.homedir()
+const gWorldPath = userhome + '\\AppData\\Roaming\\7DaysToDie\\GeneratedWorlds\\'
+
 
 const createWindow = ()=>{
     const win = new BrowserWindow({
@@ -21,7 +29,7 @@ const createWindow = ()=>{
         win.webContents.openDevTools()
     } else {
         win.loadFile('dist/index.html')
-        //win.webContents.openDevTools()
+        win.webContents.openDevTools()
     }
 }
 
@@ -32,3 +40,42 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
     app.quit()
 })
+
+ipcMain.handle('event_get_worlds', ()=>{
+
+    return new Promise((resolve,reject)=>{
+        try {
+            const files = fs.readdirSync(gWorldPath)
+            const worlds = []
+            for (const file of files) {
+                try {
+                    let items = fs.readdirSync(gWorldPath + file)
+                    if(items.includes('biomes.png')){
+                        worlds.push(file)
+                    }
+                }catch (err){continue}
+            }
+            resolve({status: true, data: worlds, msg:''})
+        }catch (err){
+            console.log('read worlds files failed: ', err.message)
+            resolve({status: false, data: null, msg: '读取世界文件夹失败'})
+        }
+    })
+})
+
+
+ipcMain.handle('event_get_img', (__, world)=>{
+    return new Promise(async (resolve,reject)=>{
+        try{
+            const worldPath = gWorldPath + world + '\\'
+            const targetPath = env === 'dev'? 'src/res/': 'res/'
+            await processImg(worldPath, targetPath)
+            resolve({status: true, data: resPath + 'map.png', msg: ''})
+        }catch (err){}
+
+    })
+
+
+})
+
+

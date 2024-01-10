@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "pinia": "^2.1.7",
+    "sharp": "^0.33.1",
     "vue": "^3.3.11"
   },
   "devDependencies": {
@@ -22,7 +23,7 @@
   },
   "build": {
     "appId": "com.zzy77.7dmap",
-    "productName": "XmTool",
+    "productName": "7dmap",
     "directories": {
       "output": "build"
     },
@@ -34,8 +35,8 @@
     ],
     "extraFiles": [
       {
-        "from": "src/assets",
-        "to": "assets",
+        "from": "src/res",
+        "to": "res",
         "filter": [
           "**/*"
         ]

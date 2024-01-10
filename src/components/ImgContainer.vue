@@ -2,8 +2,20 @@
 import configs from "@/configs";
 import {onMounted, ref, watch} from "vue";
 
-const img = ref(null)
-const canvas = ref(null)
+const ipc = myApi.ipc
+
+const imgSrc = ref('src/assets/2.png')
+
+//测试用
+onMounted(async ()=>{
+  setTimeout(async ()=>{
+    const res = await ipc.invoke('event_get_img','West Yubajike Valley')
+    console.log(res)
+    imgSrc.value = res.data
+  },2000)
+
+})
+
 
 const w = ref(configs.containerWidth)
 const h = ref(configs.containerHeight)
@@ -102,13 +114,13 @@ const onmouseout = (e) => {
        @mouseout="onmouseout">
 
 
-    <img src="@/assets/2.png" ref="img"
+    <img v-bind:src="imgSrc"
          style="object-fit: fill; position: absolute; z-index: 1;"
          :style="{width: w + 'px', height: h + 'px', left: left + 'px', top: top + 'px'}"
     />
 
 
-    <div ref="div1" style="position: absolute; background-color: rgba(255,255,0,0.4); z-index: 3"
+    <div ref="div1" style="position: absolute; z-index: 3"
          :style="{width: w+'px', height: h+'px', left: left + 'px', top: top + 'px'}"
     >
       <div

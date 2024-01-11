@@ -6,7 +6,7 @@ const {getPoints, processImg} = require('./service/service')
 
 
 const env = ''
-const resPath = env === 'dev'? 'src/res/': '../../../res/'
+const resPath = env === 'dev'? 'src/res/': '../../../res/'      //前端
 const userhome = os.homedir()
 const gWorldPath = userhome + '\\AppData\\Roaming\\7DaysToDie\\GeneratedWorlds\\'
 
@@ -70,12 +70,25 @@ ipcMain.handle('event_get_img', (__, world)=>{
             const worldPath = gWorldPath + world + '\\'
             const targetPath = env === 'dev'? 'src/res/': 'res/'
             await processImg(worldPath, targetPath)
-            resolve({status: true, data: resPath + 'map.png', msg: ''})
+            resolve({
+                status: true,
+                data: {
+                    biomes: resPath + 'biomes.png',
+                    splat3: resPath + 'splat3.png'
+                },
+                msg: ''
+            })
         }catch (err){}
 
     })
+})
 
-
+ipcMain.handle('event_get_points',(__, world)=>{
+    return new Promise(async (resolve,reject)=>{
+        const worldPath = gWorldPath + world + '\\'
+        const data = await getPoints( worldPath, env === 'dev'? 'src/res/': 'res/')
+        resolve({status: true, data: data, msg:''})
+    })
 })
 
 

@@ -11,9 +11,12 @@
     "elec-build": "electron-builder"
   },
   "dependencies": {
+    "csv-parse": "^5.5.3",
+    "gm": "^1.25.0",
+    "jimp": "^0.22.10",
     "pinia": "^2.1.7",
-    "sharp": "^0.33.1",
-    "vue": "^3.3.11"
+    "vue": "^3.3.11",
+    "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.5.2",

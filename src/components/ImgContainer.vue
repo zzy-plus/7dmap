@@ -4,15 +4,18 @@ import {onMounted, ref, watch} from "vue";
 
 const ipc = myApi.ipc
 
-const imgSrc = ref('src/assets/2.png')
+const imgSrc = ref('')
+const imgSrc2 = ref('')
 
 //测试用
 onMounted(async ()=>{
-  setTimeout(async ()=>{
-    const res = await ipc.invoke('event_get_img','West Yubajike Valley')
-    console.log(res)
-    imgSrc.value = res.data
-  },2000)
+
+  const res = await ipc.invoke('event_get_img','North Ojacotu Valley')
+  console.log(res)
+  imgSrc.value = res.data.biomes
+  imgSrc2.value = res.data.splat3
+  const {status, data, msg} = await ipc.invoke('event_get_points','North Ojacotu Valley')
+  points.value = data.points
 
 })
 
@@ -77,25 +80,6 @@ watch(w, (new_w) => {
 
 })
 
-onMounted(() => {
-  for (let i = 0; i < 200; i++) {
-    let x = Math.random() * configs.containerWidth
-    let y = Math.random() * configs.containerHeight
-    points.value.push({
-      id: 'id',
-      name: 'name',
-      size: 10,
-      color: '#5599ff',
-      init_x: x,
-      init_y: y,
-      x: x,
-      y: y,
-      real_x: 0,
-      real_y: 0
-    })
-  }
-})
-
 const onmouseover = (e) => {
   //console.log(e.target)
   console.log(e.target.getAttribute('text'))
@@ -104,6 +88,16 @@ const onmouseover = (e) => {
 const onmouseout = (e) => {
   down.value = false
 }
+
+const selection = ref({
+  '0': false,
+  '1': false,
+  '2': true,
+  '3': true,
+  '4': true,
+  '5': true,
+  '6': true
+})
 
 </script>
 
@@ -119,6 +113,11 @@ const onmouseout = (e) => {
          :style="{width: w + 'px', height: h + 'px', left: left + 'px', top: top + 'px'}"
     />
 
+    <img v-bind:src="imgSrc2"
+         style="object-fit: fill; position: absolute; z-index: 2;"
+         :style="{width: w + 'px', height: h + 'px', left: left + 'px', top: top + 'px'}"
+    />
+
 
     <div ref="div1" style="position: absolute; z-index: 3"
          :style="{width: w+'px', height: h+'px', left: left + 'px', top: top + 'px'}"
@@ -126,10 +125,10 @@ const onmouseout = (e) => {
       <div
           v-for="(point, index) in points"
           :key="index"
-          :style="{position: 'absolute', width: point.size + 'px', height: point.size + 'px',
+          :style="{position: 'absolute', width: point.size + 'px', height: point.size + 'px', zIndex: point.clazz,
           backgroundColor: point.color, left: point.x - point.size/2 + 'px', top: point.y - point.size/2 + 'px'}"
           @mouseover="onmouseover"
-          text="1230"
+          :text="point.id"
       />
 
     </div>

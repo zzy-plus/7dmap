@@ -5,7 +5,7 @@ const fs = require('fs')
 const {getPoints, processImg} = require('./service/service')
 
 
-const env = 'dev'
+const env = ''
 const resPath = env === 'dev'? 'src/res/': '../../../res/'      //前端
 const userhome = os.homedir()
 const gWorldPath = userhome + '\\AppData\\Roaming\\7DaysToDie\\GeneratedWorlds\\'
@@ -13,11 +13,11 @@ const gWorldPath = userhome + '\\AppData\\Roaming\\7DaysToDie\\GeneratedWorlds\\
 
 const createWindow = ()=>{
     const win = new BrowserWindow({
-        width: 1000,
-        height: 800,
+        width: 908,
+        height: 775,
         backgroundColor: '#ffffff',
-        resizable: true,
-        //icon: path.resolve(__dirname, '../src/assets/favicon_m.ico'), // 指定图标路径
+        resizable: false,
+        icon: './assets/7dico.ico',
         webPreferences: {
             preload: path.resolve(__dirname, 'preload.js'),
             sandbox: false
@@ -26,10 +26,10 @@ const createWindow = ()=>{
 
     if (env === 'dev') {
         win.loadURL('http://localhost:5173/')
-        win.webContents.openDevTools()
+        //win.webContents.openDevTools()
     } else {
         win.loadFile('dist/index.html')
-        win.webContents.openDevTools()
+        //win.webContents.openDevTools()
     }
 }
 
@@ -48,6 +48,7 @@ ipcMain.handle('event_get_worlds', ()=>{
             const files = fs.readdirSync(gWorldPath)
             const worlds = []
             for (const file of files) {
+                if(file.startsWith('My Level')) continue;
                 try {
                     let items = fs.readdirSync(gWorldPath + file)
                     if(items.includes('biomes.png')){

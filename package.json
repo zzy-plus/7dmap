@@ -1,6 +1,8 @@
 {
   "name": "7dmap",
-  "version": "0.0.0",
+  "version": "0.1.1",
+  "author": "zzy77",
+  "description": "7日杀地图查看器",
   "private": true,
   "main": "electron/main.js",
   "scripts": {
@@ -34,7 +36,6 @@
     "directories": {
       "output": "build"
     },
-    "asar": false,
     "files": [
       "dist/**/*",
       "public/**/*",
@@ -48,6 +49,10 @@
         "filter": [
           "**/*"
         ]
+      },
+      {
+        "from": "src/assets",
+        "to": "assets"
       }
     ],
     "win": {

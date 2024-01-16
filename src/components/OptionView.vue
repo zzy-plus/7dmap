@@ -1,5 +1,5 @@
 <script setup>
-import {ref, onMounted, provide, watch} from "vue"
+import {ref, onMounted, computed, watch} from "vue"
 import {useDataStore} from "@/stores"
 import {storeToRefs} from "pinia"
 import configs from "@/configs";
@@ -40,14 +40,19 @@ watch(classOptions,()=>{
 const imgRef = ref('')
 const {curId} = storeToRefs(useDataStore())
 watch(curId,(newVal)=>{
-  console.log(newVal)
   imgRef.value =
       configs.env === 'dev'?
           'src/res/pois/' + newVal + '.jpg'
           :
           '../../../res/pois/' + newVal + '.jpg'
-
 })
+
+const {jsonCSV} = storeToRefs(useDataStore())
+const curModel = computed(()=>{
+  return jsonCSV.value[curId.value]
+})
+
+
 
 
 </script>
@@ -55,11 +60,14 @@ watch(curId,(newVal)=>{
 
 
 <template>
-  <div style="width: 300px; height: 300px; background-color: #95d475; border: 2px solid black">
-    <img :src="imgRef" style="width: 300px; height: 300px; object-fit: fill">
+  <div style="width: 300px; height: 225px; background-color: #95d475; border: 2px solid black; overflow: hidden">
+    <img :src="imgRef" style="width: 300px; height: 225px; object-fit: fill">
   </div>
   <div style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; height: 400px;
         position: relative; top: 0;">
+    <div style="color: #181818; font-size: 16px; font-weight: bolder">
+      {{curModel? curModel.name: '请选择一个地图'}}：{{curModel? curModel.clazz: ''}}
+    </div>
     <el-select
         v-model="selected_world"
         class="m-2"

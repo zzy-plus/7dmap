@@ -29,6 +29,7 @@ const getImgAndPoints = async ()=>{
   const {status, data, msg} = await ipc.invoke('event_get_points',selectedWorld.value)
   points.value = data.points
   dataStore.setMapInfo({...data.info, name:selectedWorld.value})
+  dataStore.setJsonCSV(data.jsonCSV)
 }
 
 const {classOptions} = storeToRefs(dataStore)

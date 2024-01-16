@@ -36,6 +36,11 @@ export const useDataStore = defineStore('data', () => {
     curId.value = newVal
   }
 
+  const jsonCSV = ref({})
+  const setJsonCSV = (newVal)=>{
+    jsonCSV.value = newVal
+  }
+
 
 
 
@@ -47,7 +52,9 @@ export const useDataStore = defineStore('data', () => {
     mapInfo,
     setMapInfo,
     curId,
-    setCurId
+    setCurId,
+    jsonCSV,
+    setJsonCSV
 
   }
 })

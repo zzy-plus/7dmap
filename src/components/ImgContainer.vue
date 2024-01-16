@@ -1,8 +1,43 @@
 <script setup>
-import configs from "@/configs";
-import {onMounted, ref, watch} from "vue";
+import configs from "@/configs"
+import {onMounted, ref, watch, computed} from "vue"
+import {useDataStore} from "@/stores"
+import {storeToRefs} from "pinia";
+
 
 const ipc = myApi.ipc
+const dataStore = useDataStore()
+const {selectedWorld} = storeToRefs(dataStore)  //确保不会丢失响应式
+watch(selectedWorld,async ()=>{
+  w.value = configs.containerWidth
+  h.value = configs.containerHeight
+  left.value = 0
+  top.value = 0
+  imgSrc.value = ''
+  imgSrc2.value = ''
+  points.value = []
+  await getImgAndPoints()
+
+})
+
+const points = ref([])
+const mapInfo = ref(undefined)
+const getImgAndPoints = async ()=>{
+  const res = await ipc.invoke('event_get_img',selectedWorld.value)
+  imgSrc.value = res.data.biomes
+  imgSrc2.value = res.data.splat3
+  const {status, data, msg} = await ipc.invoke('event_get_points',selectedWorld.value)
+  points.value = data.points
+  dataStore.setMapInfo({...data.info, name:selectedWorld.value})
+}
+
+const {classOptions} = storeToRefs(dataStore)
+const computedPoints = computed(()=>{
+  return points.value.filter(i=>classOptions.value[i.clazz])
+})
+
+
+
 
 const imgSrc = ref('')
 const imgSrc2 = ref('')
@@ -10,14 +45,9 @@ const imgSrc2 = ref('')
 //测试用
 onMounted(async ()=>{
 
-  const res = await ipc.invoke('event_get_img','North Ojacotu Valley')
-  console.log(res)
-  imgSrc.value = res.data.biomes
-  imgSrc2.value = res.data.splat3
-  const {status, data, msg} = await ipc.invoke('event_get_points','North Ojacotu Valley')
-  points.value = data.points
-
 })
+
+
 
 
 const w = ref(configs.containerWidth)
@@ -26,8 +56,6 @@ const left = ref(0)
 const top = ref(0)
 const zoomStep = configs.zoomStep
 const div1 = ref(null)
-const points = ref([])
-
 const down = ref(false)
 
 const onmousemove = (e) => {
@@ -72,32 +100,20 @@ const wheel = (e) => {
   }
 }
 
-const onclick = (e) => {
+const onclick = () => {
 
 }
 
-watch(w, (new_w) => {
-
-})
 
 const onmouseover = (e) => {
-  //console.log(e.target)
-  console.log(e.target.getAttribute('text'))
+  const cur_id = e.target.getAttribute('text')
+  dataStore.setCurId(cur_id)
 }
 
 const onmouseout = (e) => {
   down.value = false
 }
 
-const selection = ref({
-  '0': false,
-  '1': false,
-  '2': true,
-  '3': true,
-  '4': true,
-  '5': true,
-  '6': true
-})
 
 </script>
 
@@ -120,16 +136,16 @@ const selection = ref({
 
 
     <div ref="div1" style="position: absolute; z-index: 3"
-         :style="{width: w+'px', height: h+'px', left: left + 'px', top: top + 'px'}"
-    >
-      <div
-          v-for="(point, index) in points"
-          :key="index"
-          :style="{position: 'absolute', width: point.size + 'px', height: point.size + 'px', zIndex: point.clazz,
-          backgroundColor: point.color, left: point.x - point.size/2 + 'px', top: point.y - point.size/2 + 'px'}"
-          @mouseover="onmouseover"
-          :text="point.id"
-      />
+         :style="{width: w+'px', height: h+'px', left: left + 'px', top: top + 'px'}">
+
+        <div
+            v-for="(point, index) in computedPoints"
+            :key="index"
+            :style="{position: 'absolute', width: point.size + 'px', height: point.size + 'px', zIndex: point.clazz,
+            backgroundColor: point.color, left: point.x - point.size/2 + 'px', top: point.y - point.size/2 + 'px'}"
+            @mouseover="onmouseover"
+            :text="point.id"/>
+
 
     </div>
 

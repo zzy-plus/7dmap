@@ -116,18 +116,14 @@ const parseXmlFiles = (xmlPath) => {
 }
 
 //底图处理
-const processImg = async (source, target) => {
-
-    //getPoints('C:\\Users\\ASUS\\AppData\\Roaming\\7DaysToDie\\GeneratedWorlds\\North Ojacotu Valley\\', './src/res/')
-
-    //parseXmlFiles('C:\\Users\\ASUS\\AppData\\Roaming\\7DaysToDie\\GeneratedWorlds\\North Ojacotu Valley\\')
+const processImg = async (source, target, world) => {
 
     return new Promise(async (resolve, reject) => {
 
         const file1 = fs.readFileSync(source + 'biomes.png')
-        fs.writeFileSync(target + 'biomes.png', file1)
+        fs.writeFileSync(target + world + ' biomes.png', file1)
         const file2 = fs.readFileSync(source + 'splat3.png')
-        fs.writeFileSync(target + 'splat3.png', file2)
+        fs.writeFileSync(target + world + ' splat3.png', file2)
 
         resolve(0)
     })

@@ -1,7 +1,9 @@
 <script setup>
 import '@/assets/index.css'
-import configs from "@/configs";
 import ImgContainer from "@/components/ImgContainer.vue";
+import OptionView from "@/components/OptionView.vue";
+import FooterView from "@/components/FooterView.vue";
+
 
 </script>
 
@@ -11,12 +13,13 @@ import ImgContainer from "@/components/ImgContainer.vue";
     <ImgContainer/>
   </div>
 
-  <div style="position: absolute; left: 601px; top: 0; height: 600px; width: 300px; background-color: white">
-
-
-
+  <div style="position: absolute; left: 600px; top: 0; height: 720px; width: 300px; background-color: white">
+    <OptionView/>
   </div>
 
+  <div style="position: absolute; left: 0; top: 600px; width: 600px;">
+    <FooterView/>
+  </div>
 </template>
 
 

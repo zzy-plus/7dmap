@@ -33,8 +33,10 @@ const getPoints = async (xmlPath, resPath) => {
     for (const item of models) {
         const id = item._attributes.name
         if (!jsonCSV.hasOwnProperty(id)) continue;
-        const real_x = Number(item._attributes.position.split(',')[0])
-        const real_y = Number(item._attributes.position.split(',')[2])
+        const position = item._attributes.position.split(',')
+        const real_x = Number(position[0])
+        const real_y = Number(position[2])
+        const real_z = Number(position[1])
         const init_x = (real_x + mapInfo.size / 2) / mapInfo.size * containerSize
         const init_y = (mapInfo.size / 2 - real_y) / mapInfo.size * containerSize
         const x = init_x
@@ -62,7 +64,8 @@ const getPoints = async (xmlPath, resPath) => {
             x: x,
             y: y,
             real_x: real_x,
-            real_y: real_y
+            real_y: real_y,
+            real_z: real_z
         })
     }
     return {info: mapInfo, points: points, jsonCSV:jsonCSV}

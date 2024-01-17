@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  child_process:
+    specifier: ^1.0.2
+    version: 1.0.2
   csv-parse:
     specifier: ^5.5.3
     version: registry.npmmirror.com/csv-parse@5.5.3
@@ -1072,6 +1075,10 @@ packages:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
     dev: true
+
+  /child_process@1.0.2:
+    resolution: {integrity: sha512-Wmza/JzL0SiWz7kl6MhIKT5ceIlnFPJX+lwUGj7Clhy5MMldsSoJR0+uvRzOS5Kv45Mq7t1PoE8TsOA9bzvb6g==, tarball: https://registry.npmmirror.com/child_process/-/child_process-1.0.2.tgz}
+    dev: false
 
   /chokidar@3.5.3:
     resolution: {integrity: sha512-Dr3sfKRP6oTcjf2JmUmFJfeVMvXBdegxB0iVQ5eb2V10uFJUCAS8OByZdVAyVb8xXNz3GjjTgj9kLWsZTqE6kw==, tarball: https://registry.npmmirror.com/chokidar/-/chokidar-3.5.3.tgz}

@@ -1,7 +1,7 @@
 {
   "name": "7dmap",
-  "version": "0.1.1",
-  "author": "zzy77",
+  "version": "0.1.2",
+  "author": "zzy77@qq2673926013",
   "description": "7日杀地图查看器",
   "private": true,
   "main": "electron/main.js",
@@ -13,6 +13,7 @@
     "elec-build": "electron-builder"
   },
   "dependencies": {
+    "child_process": "^1.0.2",
     "csv-parse": "^5.5.3",
     "element-plus": "^2.5.1",
     "gm": "^1.25.0",
@@ -53,6 +54,10 @@
       {
         "from": "src/assets",
         "to": "assets"
+      },
+      {
+        "from": "ImgProcess.exe",
+        "to": "ImgProcess.exe"
       }
     ],
     "win": {

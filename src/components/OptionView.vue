@@ -52,6 +52,14 @@ const curModel = computed(()=>{
   return jsonCSV.value[curId.value]
 })
 
+const onSave = ()=>{
+  if(!selected_world.value) return
+  ipc.invoke('event_save_img', {
+    world: selected_world.value,
+    points: JSON.stringify(dataStore.points),
+    mapSize: dataStore.mapInfo.size
+  })
+}
 
 
 
@@ -63,7 +71,7 @@ const curModel = computed(()=>{
   <div style="width: 300px; height: 225px; background-color: #95d475; border: 2px solid black; overflow: hidden">
     <img :src="imgRef" style="width: 300px; height: 225px; object-fit: fill">
   </div>
-  <div style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; height: 400px;
+  <div style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; height: 420px;
         position: relative; top: 0;">
     <div style="color: #181818; font-size: 16px; font-weight: bolder">
       {{curModel? curModel.name: '请选择一个地图'}}：{{curModel? curModel.clazz: ''}}
@@ -165,13 +173,10 @@ const curModel = computed(()=>{
       </el-checkbox>
     </div>
 
-
-
+    <el-button type="success" plain style="margin-top: 10px" @click="onSave">保存图片</el-button>
 
 
   </div>
-
-
 
 </template>
 

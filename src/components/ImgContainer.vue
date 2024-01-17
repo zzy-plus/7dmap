@@ -47,8 +47,7 @@ const getImgAndPoints = async ()=>{
       jsonCSV: data.jsonCSV
     }
   }
-
-
+  dataStore.setPoints(points.value)
 }
 
 const {classOptions} = storeToRefs(dataStore)

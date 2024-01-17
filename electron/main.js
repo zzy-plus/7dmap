@@ -1,19 +1,20 @@
-const {app, BrowserWindow, ipcMain} = require('electron')
+const {app, BrowserWindow, ipcMain, dialog} = require('electron')
 const path = require('path')
 const os = require('os')
 const fs = require('fs')
+const {execSync, exec} = require('child_process')
 const {getPoints, processImg} = require('./service/service')
 
 
-const env = 'dev'
+const env = ''
 const resPath = env === 'dev'? 'src/res/': '../../../res/'      //前端
 const userhome = os.homedir()
 const gWorldPath = userhome + '\\AppData\\Roaming\\7DaysToDie\\GeneratedWorlds\\'
 
-
+let win
 const createWindow = ()=>{
-    const win = new BrowserWindow({
-        width: 1200,     //908
+    win = new BrowserWindow({
+        width: 908,     //908
         height: 775,
         backgroundColor: '#ffffff',
         resizable: false,
@@ -91,6 +92,31 @@ ipcMain.handle('event_get_points',(__, world)=>{
         const data = await getPoints( worldPath, env === 'dev'? 'src/res/': 'res/')
         resolve({status: true, data: data, msg:''})
     })
+})
+
+ipcMain.handle('event_save_img',(__, params)=>{
+
+    const {world, points, mapSize} = params
+    const options = {
+        title: '另存为',
+        defaultPath: world + '.png',
+        buttonLabel: '保存',
+        filters: [{ name: '图片文件', extensions: ['png'] }],
+    }
+    fs.writeFileSync(`${env === 'dev'? 'src\\res\\': 'res\\'}points.json`, points)
+
+    dialog.showSaveDialog(win, options).then((result) => {
+        if (!result.canceled) {
+            const savePath = result.filePath;
+            const command = `ImgProcess \"${world}\" ${env === 'dev'? 'src\\res\\': 'res\\'} \"${savePath}\" ${mapSize}`
+            exec(command, (error, stdout, stderr) => {
+                if (error || stderr) {
+                    console.error(`command erro: ${error.message}`);
+                }
+            })
+        }
+    })
+
 })
 
 

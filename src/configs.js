@@ -1,6 +1,6 @@
 export default {
-    env: '',
+    env: 'dev',
     containerWidth: 600,
     containerHeight: 600,
-    zoomStep: 50,   //缩放步长
+    zoomStep: 100,   //缩放步长
 }

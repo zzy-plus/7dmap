@@ -6,6 +6,7 @@ import {storeToRefs} from "pinia";
 
 
 const ipc = myApi.ipc
+const resPath = configs.env === 'dev'? 'src/res/': '../../../res/'
 const dataStore = useDataStore()
 const {selectedWorld} = storeToRefs(dataStore)  //确保不会丢失响应式
 watch(selectedWorld,async ()=>{
@@ -22,34 +23,42 @@ watch(selectedWorld,async ()=>{
 
 const points = ref([])
 const mapInfo = ref(undefined)
+const loadedWorlds = []
+const loadedPointsData = {}
 const getImgAndPoints = async ()=>{
-  const res = await ipc.invoke('event_get_img',selectedWorld.value)
-  imgSrc.value = res.data.biomes
-  imgSrc2.value = res.data.splat3
-  const {status, data, msg} = await ipc.invoke('event_get_points',selectedWorld.value)
-  points.value = data.points
-  dataStore.setMapInfo({...data.info, name:selectedWorld.value})
-  dataStore.setJsonCSV(data.jsonCSV)
+  if(loadedWorlds.includes(selectedWorld.value)){
+    imgSrc.value = resPath + 'pngs/' + selectedWorld.value + ' biomes.png'
+    imgSrc2.value = resPath + 'pngs/' + selectedWorld.value + ' splat3.png'
+    points.value = loadedPointsData[selectedWorld.value].points
+    dataStore.setMapInfo(loadedPointsData[selectedWorld.value].mapInfo)
+    dataStore.setJsonCSV(loadedPointsData[selectedWorld.value].jsonCSV)
+  }else{
+    const res = await ipc.invoke('event_get_img',selectedWorld.value)
+    imgSrc.value = res.data.biomes
+    imgSrc2.value = res.data.splat3
+    const {status, data, msg} = await ipc.invoke('event_get_points',selectedWorld.value)
+    points.value = data.points
+    dataStore.setMapInfo({...data.info, name:selectedWorld.value})
+    dataStore.setJsonCSV(data.jsonCSV)
+    loadedWorlds.push(selectedWorld.value)
+    loadedPointsData[selectedWorld.value] = {
+      points: points.value,
+      mapInfo: {...data.info, name:selectedWorld.value},
+      jsonCSV: data.jsonCSV
+    }
+  }
+
+
 }
 
 const {classOptions} = storeToRefs(dataStore)
-const computedPoints = computed(()=>{
+const filter_points = computed(()=>{
   return points.value.filter(i=>classOptions.value[i.clazz])
 })
 
 
-
-
 const imgSrc = ref('')
 const imgSrc2 = ref('')
-
-//测试用
-onMounted(async ()=>{
-
-})
-
-
-
 
 const w = ref(configs.containerWidth)
 const h = ref(configs.containerHeight)
@@ -59,15 +68,24 @@ const zoomStep = configs.zoomStep
 const div1 = ref(null)
 const down = ref(false)
 
+let move_limited = undefined
+let wheel_limited = undefined
 const onmousemove = (e) => {
   if (down.value) {
-    //对拖拽行为的限制
-    if (left.value >= configs.containerWidth - 100 && e.movementX > 0) return;
-    if (left.value + w.value <= 100 && e.movementX < 0) return;
-    if (top.value >= configs.containerWidth - 100 && e.movementY > 0) return;
-    if (top.value + h.value <= 100 && e.movementY < 0) return;
-    left.value += e.movementX
-    top.value += e.movementY
+    if(!move_limited){
+      move_limited = setTimeout(()=>{
+        //对拖拽行为的限制
+        if (left.value >= configs.containerWidth - 100 && e.movementX > 0) return;
+        if (left.value + w.value <= 100 && e.movementX < 0) return;
+        if (top.value >= configs.containerWidth - 100 && e.movementY > 0) return;
+        if (top.value + h.value <= 100 && e.movementY < 0) return;
+        left.value += e.movementX
+        top.value += e.movementY
+        move_limited = undefined
+      },3)
+
+    }
+
   }
 }
 
@@ -81,38 +99,38 @@ const onmouseup = () => {
 }
 
 const wheel = (e) => {
-  if (e.deltaY < -1) { //滚轮向上
-    w.value += zoomStep
-    h.value += zoomStep
-    left.value -= e.offsetX / w.value * zoomStep
-    top.value -= e.offsetY / h.value * zoomStep
-  } else if (e.deltaY > 1) { //滚轮向下
-    if (h.value <= 400) return    //对缩放行为的限制
-    w.value -= zoomStep
-    h.value -= zoomStep
-    left.value += e.offsetX / w.value * zoomStep
-    top.value += e.offsetY / h.value * zoomStep
-  }
-  //console.log(e)
-  for (const index in points.value) {
-    points.value[index].x = points.value[index].init_x * w.value/configs.containerWidth
-    points.value[index].y = points.value[index].init_y * h.value/configs.containerHeight
-
+  if(!wheel_limited){
+    wheel_limited = setTimeout(()=>{
+      if (e.deltaY < -1) { //滚轮向上
+        w.value += zoomStep
+        h.value += zoomStep
+        left.value -= e.offsetX / w.value * zoomStep
+        top.value -= e.offsetY / h.value * zoomStep
+      } else if (e.deltaY > 1) { //滚轮向下
+        if (h.value > 401){  //对缩放行为的限制
+          w.value -= zoomStep
+          h.value -= zoomStep
+          left.value += e.offsetX / w.value * zoomStep
+          top.value += e.offsetY / h.value * zoomStep
+        }
+      }
+      wheel_limited = undefined
+    },50)
   }
 }
 
-const onclick = () => {
+const computed_points = computed(() => {
+  return filter_points.value.map(point => {
+    const x = point.init_x * w.value/configs.containerWidth
+    const y = point.init_y * h.value/configs.containerHeight
+    return { ...point, x, y };
+  });
+});
 
-}
 
-
-const onmouseover = (e) => {
+const onmouseenter = (e) => {
   const cur_id = e.target.getAttribute('text')
   dataStore.setCurId(cur_id)
-}
-
-const onmouseout = (e) => {
-  down.value = false
 }
 
 
@@ -121,8 +139,7 @@ const onmouseout = (e) => {
 <template>
   <div style=" background-color: #c9c9c9; border: 2px solid black; overflow: hidden; position: relative;"
        :style="{width: configs.containerWidth + 'px', height: configs.containerHeight + 'px'}"
-       @mousedown.prevent="onmousedown" @mouseup="onmouseup" @mousemove="onmousemove" @wheel="wheel" @click="onclick"
-       @mouseout="onmouseout">
+       @mousedown.prevent="onmousedown" @mouseup="onmouseup" @mousemove="onmousemove" @wheel="wheel">
 
 
     <img v-bind:src="imgSrc"
@@ -140,11 +157,11 @@ const onmouseout = (e) => {
          :style="{width: w+'px', height: h+'px', left: left + 'px', top: top + 'px'}">
 
         <div
-            v-for="(point, index) in computedPoints"
+            v-for="(point, index) in computed_points"
             :key="index"
             :style="{position: 'absolute', width: point.size + 'px', height: point.size + 'px', zIndex: point.clazz,
             backgroundColor: point.color, left: point.x - point.size/2 + 'px', top: point.y - point.size/2 + 'px'}"
-            @mouseover="onmouseover"
+            @mouseenter="onmouseenter"
             :text="point.id"/>
 
 

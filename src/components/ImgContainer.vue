@@ -6,10 +6,10 @@ import {storeToRefs} from "pinia";
 
 
 const ipc = myApi.ipc
-const resPath = configs.env === 'dev'? 'src/res/': '../../../res/'
+const resPath = configs.env === 'dev' ? 'src/res/' : '../../../res/'
 const dataStore = useDataStore()
 const {selectedWorld} = storeToRefs(dataStore)  //确保不会丢失响应式
-watch(selectedWorld,async ()=>{
+watch(selectedWorld, async () => {
   w.value = configs.containerWidth
   h.value = configs.containerHeight
   left.value = 0
@@ -25,25 +25,25 @@ const points = ref([])
 const mapInfo = ref(undefined)
 const loadedWorlds = []
 const loadedPointsData = {}
-const getImgAndPoints = async ()=>{
-  if(loadedWorlds.includes(selectedWorld.value)){
+const getImgAndPoints = async () => {
+  if (loadedWorlds.includes(selectedWorld.value)) {
     imgSrc.value = resPath + 'pngs/' + selectedWorld.value + ' biomes.png'
     imgSrc2.value = resPath + 'pngs/' + selectedWorld.value + ' splat3.png'
     points.value = loadedPointsData[selectedWorld.value].points
     dataStore.setMapInfo(loadedPointsData[selectedWorld.value].mapInfo)
     dataStore.setJsonCSV(loadedPointsData[selectedWorld.value].jsonCSV)
-  }else{
-    const res = await ipc.invoke('event_get_img',selectedWorld.value)
+  } else {
+    const res = await ipc.invoke('event_get_img', selectedWorld.value)
     imgSrc.value = res.data.biomes
     imgSrc2.value = res.data.splat3
-    const {status, data, msg} = await ipc.invoke('event_get_points',selectedWorld.value)
+    const {status, data, msg} = await ipc.invoke('event_get_points', selectedWorld.value)
     points.value = data.points
-    dataStore.setMapInfo({...data.info, name:selectedWorld.value})
+    dataStore.setMapInfo({...data.info, name: selectedWorld.value})
     dataStore.setJsonCSV(data.jsonCSV)
     loadedWorlds.push(selectedWorld.value)
     loadedPointsData[selectedWorld.value] = {
       points: points.value,
-      mapInfo: {...data.info, name:selectedWorld.value},
+      mapInfo: {...data.info, name: selectedWorld.value},
       jsonCSV: data.jsonCSV
     }
   }
@@ -51,8 +51,8 @@ const getImgAndPoints = async ()=>{
 }
 
 const {classOptions} = storeToRefs(dataStore)
-const filter_points = computed(()=>{
-  return points.value.filter(i=>classOptions.value[i.clazz])
+const filter_points = computed(() => {
+  return points.value.filter(i => classOptions.value[i.clazz])
 })
 
 
@@ -71,8 +71,8 @@ let move_limited = undefined
 let wheel_limited = undefined
 const onmousemove = (e) => {
   if (down.value) {
-    if(!move_limited){
-      move_limited = setTimeout(()=>{
+    if (!move_limited) {
+      move_limited = setTimeout(() => {
         //对拖拽行为的限制
         if (left.value >= configs.containerWidth - 100 && e.movementX > 0) return;
         if (left.value + w.value <= 100 && e.movementX < 0) return;
@@ -81,7 +81,7 @@ const onmousemove = (e) => {
         left.value += e.movementX
         top.value += e.movementY
         move_limited = undefined
-      },3)
+      }, 3)
 
     }
 
@@ -98,15 +98,15 @@ const onmouseup = () => {
 }
 
 const wheel = (e) => {
-  if(!wheel_limited){
-    wheel_limited = setTimeout(()=>{
+  if (!wheel_limited) {
+    wheel_limited = setTimeout(() => {
       if (e.deltaY < -1) { //滚轮向上
         w.value += zoomStep
         h.value += zoomStep
         left.value -= e.offsetX / w.value * zoomStep
         top.value -= e.offsetY / h.value * zoomStep
       } else if (e.deltaY > 1) { //滚轮向下
-        if (h.value > 401){  //对缩放行为的限制
+        if (h.value > 401) {  //对缩放行为的限制
           w.value -= zoomStep
           h.value -= zoomStep
           left.value += e.offsetX / w.value * zoomStep
@@ -114,15 +114,15 @@ const wheel = (e) => {
         }
       }
       wheel_limited = undefined
-    },50)
+    }, 50)
   }
 }
 
 const computed_points = computed(() => {
   return filter_points.value.map(point => {
-    const x = point.init_x * w.value/configs.containerWidth
-    const y = point.init_y * h.value/configs.containerHeight
-    return { ...point, x, y };
+    const x = point.init_x * w.value / configs.containerWidth
+    const y = point.init_y * h.value / configs.containerHeight
+    return {...point, x, y};
   });
 });
 
@@ -155,17 +155,14 @@ const onmouseenter = (e) => {
     <div ref="div1" style="position: absolute; z-index: 3"
          :style="{width: w+'px', height: h+'px', left: left + 'px', top: top + 'px'}">
 
-        <div
-            v-for="(point, index) in computed_points"
-            :key="index"
-            :style="{position: 'absolute', width: point.size + 'px', height: point.size + 'px', zIndex: point.clazz,
+      <div
+          v-for="(point, index) in computed_points"
+          :key="index"
+          :style="{position: 'absolute', width: point.size + 'px', height: point.size + 'px', zIndex: point.clazz,
             backgroundColor: point.color, left: point.x - point.size/2 + 'px', top: point.y - point.size/2 + 'px'}"
-            @mouseenter="onmouseenter"
-            :text="point.id"/>
-
-
+          @mouseenter="onmouseenter"
+          :text="point.id"/>
     </div>
-
 
   </div>
 

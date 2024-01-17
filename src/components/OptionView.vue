@@ -7,17 +7,16 @@ import configs from "@/configs";
 const dataStore = useDataStore()
 const ipc = myApi.ipc
 const selected_world = ref(undefined)
-const onSelectedWorldChange = (newWorld)=>{
+const onSelectedWorldChange = (newWorld) => {
   dataStore.setSelectedWorld(newWorld)
 }
 
-
 const world_options = ref([])
-onMounted(async ()=>{
-  const {status, data, msg} = await ipc.invoke('event_get_worlds','')
-  if (status){
+onMounted(async () => {
+  const {status, data, msg} = await ipc.invoke('event_get_worlds', '')
+  if (status) {
     world_options.value = data
-  }else {
+  } else {
     ElMessage.error(msg)
     world_options.value = []
   }
@@ -33,39 +32,34 @@ const classOptions = ref({
   '5': true,
   '6': true    //trader
 })
-watch(classOptions,()=>{
+watch(classOptions, () => {
   dataStore.setClassOptions(classOptions.value)
-},{deep:true})
+}, {deep: true})
 
 const imgRef = ref('')
 const {curId} = storeToRefs(useDataStore())
-watch(curId,(newVal)=>{
+watch(curId, (newVal) => {
   imgRef.value =
-      configs.env === 'dev'?
+      configs.env === 'dev' ?
           'src/res/pois/' + newVal + '.jpg'
           :
           '../../../res/pois/' + newVal + '.jpg'
 })
 
 const {jsonCSV} = storeToRefs(useDataStore())
-const curModel = computed(()=>{
+const curModel = computed(() => {
   return jsonCSV.value[curId.value]
 })
 
-const onSave = ()=>{
-  if(!selected_world.value) return
+const onSave = () => {
+  if (!selected_world.value) return
   ipc.invoke('event_save_img', {
     world: selected_world.value,
     points: JSON.stringify(dataStore.points),
     mapSize: dataStore.mapInfo.size
   })
 }
-
-
-
 </script>
-
-
 
 <template>
   <div style="width: 300px; height: 225px; background-color: #95d475; border: 2px solid black; overflow: hidden">
@@ -74,7 +68,7 @@ const onSave = ()=>{
   <div style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; height: 420px;
         position: relative; top: 0;">
     <div style="color: #181818; font-size: 16px; font-weight: bolder">
-      {{curModel? curModel.name: '请选择一个地图'}}：{{curModel? curModel.clazz: ''}}
+      {{ curModel ? curModel.name : '请选择一个地图' }}：{{ curModel ? curModel.clazz : '' }}
     </div>
     <el-select
         v-model="selected_world"
@@ -174,7 +168,6 @@ const onSave = ()=>{
     </div>
 
     <el-button type="success" plain style="margin-top: 10px" @click="onSave">保存图片</el-button>
-
 
   </div>
 

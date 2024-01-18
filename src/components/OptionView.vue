@@ -11,16 +11,18 @@ const onSelectedWorldChange = (newWorld) => {
   dataStore.setSelectedWorld(newWorld)
 }
 
+
 const world_options = ref([])
-onMounted(async () => {
-  const {status, data, msg} = await ipc.invoke('event_get_worlds', '')
-  if (status) {
+onMounted(async ()=>{
+  const {status, data, msg} = await ipc.invoke('event_get_worlds','')
+  if (status){
     world_options.value = data
-  } else {
+  }else {
     ElMessage.error(msg)
     world_options.value = []
   }
 })
+
 
 const classOptions = ref({
   '0': false,
@@ -31,27 +33,27 @@ const classOptions = ref({
   '5': true,
   '6': true    //trader
 })
-watch(classOptions, () => {
+watch(classOptions,()=>{
   dataStore.setClassOptions(classOptions.value)
-}, {deep: true})
+},{deep:true})
 
 const imgRef = ref('')
 const {curId} = storeToRefs(useDataStore())
-watch(curId, (newVal) => {
+watch(curId,(newVal)=>{
   imgRef.value =
-      configs.env === 'dev' ?
+      configs.env === 'dev'?
           'src/res/pois/' + newVal + '.jpg'
           :
           '../../../res/pois/' + newVal + '.jpg'
 })
 
 const {jsonCSV} = storeToRefs(useDataStore())
-const curModel = computed(() => {
+const curModel = computed(()=>{
   return jsonCSV.value[curId.value]
 })
 
-const onSave = () => {
-  if (!selected_world.value) return
+const onSave = ()=>{
+  if(!selected_world.value) return
   ipc.invoke('event_save_img', {
     world: selected_world.value,
     points: JSON.stringify(dataStore.points),
@@ -59,12 +61,10 @@ const onSave = () => {
   })
 }
 
-const browseWorld = ()=>{
-  ipc.invoke('event_browse_world', '')
-}
 
 
 </script>
+
 
 
 <template>
@@ -74,32 +74,23 @@ const browseWorld = ()=>{
   <div style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; height: 420px;
         position: relative; top: 0;">
     <div style="color: #181818; font-size: 16px; font-weight: bolder">
-      {{ curModel ? curModel.name : '请选择一个地图' }}：{{ curModel ? curModel.clazz : '' }}
+      {{curModel? curModel.name: '请选择一个地图'}}：{{curModel? curModel.clazz: ''}}
     </div>
-    <div style="display: flex; justify-content: space-evenly; align-items: center">
-      <el-select
-          v-model="selected_world"
-          class="m-2"
-          placeholder="选择世界"
-          size="middle"
-          style="width: 170px"
-          @change="onSelectedWorldChange"
-      >
-        <el-option
-            v-for="item in world_options"
-            :key="item"
-            :label="item"
-            :value="item"
-        />
-      </el-select>
-
-      <div>
-        <el-button type="warning" style="width: 75px; position: relative; left: 5px" @click="browseWorld">
-          手动选择
-        </el-button>
-      </div>
-
-    </div>
+    <el-select
+        v-model="selected_world"
+        class="m-2"
+        placeholder="选择世界"
+        size="large"
+        style="width: 240px"
+        @change="onSelectedWorldChange"
+    >
+      <el-option
+          v-for="item in world_options"
+          :key="item"
+          :label="item"
+          :value="item"
+      />
+    </el-select>
 
 
     <div style="display: flex; flex-direction: column; align-items: flex-start; position: relative; left: -10px">

@@ -6,7 +6,7 @@ const {execSync, exec} = require('child_process')
 const {getPoints, processImg} = require('./service/service')
 
 
-const env = 'dev'
+const env = ''
 const resPath = env === 'dev'? 'src/res/': '../../../res/'      //前端
 const userhome = os.homedir()
 const gWorldPath = userhome + '\\AppData\\Roaming\\7DaysToDie\\GeneratedWorlds\\'
@@ -27,7 +27,7 @@ const createWindow = ()=>{
 
     if (env === 'dev') {
         win.loadURL('http://localhost:5173/')
-        //win.webContents.openDevTools()
+        win.webContents.openDevTools()
     } else {
         win.loadFile('dist/index.html')
         //win.webContents.openDevTools()

@@ -68,7 +68,7 @@ const getPoints = async (xmlPath, resPath) => {
             real_z: real_z
         })
     }
-    return {info: mapInfo, points: points, jsonCSV:jsonCSV}
+    return {info: mapInfo, points: points, jsonCSV: jsonCSV}
 }
 
 //处理CSV

@@ -46,6 +46,11 @@ export const useDataStore = defineStore('data', () => {
     points.value = newVal
   }
 
+  const selectedPath = ref(undefined)
+  const setSelectedPath = (newVal)=>{
+    selectedPath.value = newVal
+  }
+
 
 
 
@@ -61,7 +66,9 @@ export const useDataStore = defineStore('data', () => {
     jsonCSV,
     setJsonCSV,
     points,
-    setPoints
+    setPoints,
+    selectedPath,
+    setSelectedPath
 
   }
 })

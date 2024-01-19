@@ -9,6 +9,7 @@ const ipc = myApi.ipc
 const selected_world = ref(undefined)
 const onSelectedWorldChange = (newWorld) => {
   dataStore.setSelectedWorld(newWorld)
+  dataStore.setSelectedPath(undefined)
 }
 
 
@@ -61,6 +62,17 @@ const onSave = ()=>{
   })
 }
 
+const browseWorld = async ()=>{
+  const {status, data, msg} = await ipc.invoke('event_browse_world','')
+  if(status){
+    if(!data) return;
+    dataStore.setSelectedPath(data)
+    dataStore.setSelectedWorld(undefined)
+    selected_world.value = null
+  }else {
+    ElMessage.error(msg)
+  }
+}
 
 
 </script>
@@ -76,22 +88,30 @@ const onSave = ()=>{
     <div style="color: #181818; font-size: 16px; font-weight: bolder">
       {{curModel? curModel.name: '请选择一个地图'}}：{{curModel? curModel.clazz: ''}}
     </div>
-    <el-select
-        v-model="selected_world"
-        class="m-2"
-        placeholder="选择世界"
-        size="large"
-        style="width: 240px"
-        @change="onSelectedWorldChange"
-    >
-      <el-option
-          v-for="item in world_options"
-          :key="item"
-          :label="item"
-          :value="item"
-      />
-    </el-select>
+    <div style="display: flex; justify-content: space-evenly; align-items: center">
+      <el-select
+          v-model="selected_world"
+          class="m-2"
+          placeholder="选择世界"
+          size="default"
+          style="width: 170px"
+          @change="onSelectedWorldChange"
+      >
+        <el-option
+            v-for="item in world_options"
+            :key="item"
+            :label="item"
+            :value="item"
+        />
+      </el-select>
 
+      <div>
+        <el-button type="warning" style="width: 75px; position: relative; left: 5px" @click="browseWorld">
+          手动选择
+        </el-button>
+      </div>
+
+    </div>
 
     <div style="display: flex; flex-direction: column; align-items: flex-start; position: relative; left: -10px">
       <el-checkbox v-model="classOptions['6']" style="margin: 5px">

@@ -6,7 +6,7 @@ const {execSync, exec} = require('child_process')
 const {getPoints, processImg} = require('./service/service')
 
 
-const env = ''
+const env = 'dev'
 const resPath = env === 'dev'? 'src/res/': '../../../res/'      //前端
 const userhome = os.homedir()
 const gWorldPath = userhome + '\\AppData\\Roaming\\7DaysToDie\\GeneratedWorlds\\'
@@ -14,7 +14,7 @@ const gWorldPath = userhome + '\\AppData\\Roaming\\7DaysToDie\\GeneratedWorlds\\
 let win
 const createWindow = ()=>{
     win = new BrowserWindow({
-        width: 908,     //908
+        width: 1200,     //908
         height: 775,
         backgroundColor: '#ffffff',
         resizable: false,
@@ -60,7 +60,7 @@ ipcMain.handle('event_get_worlds', ()=>{
             resolve({status: true, data: worlds, msg:''})
         }catch (err){
             console.log('read worlds files failed: ', err.message)
-            resolve({status: false, data: null, msg: '读取世界文件夹失败'})
+            resolve({status: false, data: null, msg: '读取世界文件夹失败，请使用手动选择'})
         }
     })
 })
@@ -70,14 +70,23 @@ ipcMain.handle('event_get_img', (__, world)=>{
 
     return new Promise(async (resolve,reject)=>{
         try{
-            const worldPath = gWorldPath + world + '\\'
+            let worldPath
+            let worldName
+            if(world.includes('\\')){   //如果传过来的是路径，表明使用的是手动选择
+                worldPath = world + '\\'
+                worldName = world.split('\\').pop() + '_key'
+            }else {
+                worldPath = gWorldPath + world + '\\'
+                worldName = world
+            }
+            console.log(worldPath)
             const targetPath = env === 'dev'? 'src/res/pngs/': 'res/pngs/'
-            await processImg(worldPath, targetPath, world)
+            await processImg(worldPath, targetPath, worldName)
             resolve({
                 status: true,
                 data: {
-                    biomes: resPath + 'pngs/' + world + ' biomes.png',
-                    splat3: resPath + 'pngs/' + world + ' splat3.png'
+                    biomes: resPath + 'pngs/' + worldName + ' biomes.png',
+                    splat3: resPath + 'pngs/' + worldName + ' splat3.png'
                 },
                 msg: ''
             })
@@ -88,7 +97,7 @@ ipcMain.handle('event_get_img', (__, world)=>{
 
 ipcMain.handle('event_get_points',(__, world)=>{
     return new Promise(async (resolve,reject)=>{
-        const worldPath = gWorldPath + world + '\\'
+        const worldPath = world.includes('\\')? world + '\\': gWorldPath + world + '\\'
         const data = await getPoints( worldPath, env === 'dev'? 'src/res/': 'res/')
         resolve({status: true, data: data, msg:''})
     })
@@ -120,7 +129,20 @@ ipcMain.handle('event_save_img',(__, params)=>{
 })
 
 ipcMain.handle('event_browse_world',()=>{
-
+    return new Promise((resolve,reject)=>{
+        dialog.showOpenDialog({
+            properties: ['openDirectory'] // 指定对话框打开文件夹
+        }).then(result => {
+            if (!result.canceled && result.filePaths.length > 0) {
+                const selectedPath = result.filePaths[0];
+                resolve({status: true, data: selectedPath, msg:''})
+            } else {
+                resolve({status: true, data: undefined, msg:''})
+            }
+        }).catch(err => {
+            resolve({status: false, data: undefined, msg: '打开路径选择对话框时发生错误'})
+        });
+    })
 })
 
 

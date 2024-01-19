@@ -17,7 +17,7 @@ import FooterView from "@/components/FooterView.vue";
     <OptionView/>
   </div>
 
-  <div style="position: absolute; left: 0; top: 600px; width: 600px;">
+  <div style="position: absolute; left: 0; top: 600px; width: 600px; background-color: white">
     <FooterView/>
   </div>
 </template>

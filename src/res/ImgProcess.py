@@ -25,14 +25,15 @@ sizes = {
 if __name__ == '__main__':
 
     params = sys.argv
-    world_name = params[1]
+    #world_name = params[1]
+    path = params[1]
     res_path = params[2]
     output_path = params[3]
     mapSize = int(params[4])
 
-    user_home_dir = os.path.expanduser("~")
-    spath = r'\AppData\Roaming\7DaysToDie\GeneratedWorlds'
-    path = user_home_dir + spath + '\\' + world_name + '\\'
+    # user_home_dir = os.path.expanduser("~")
+    # spath = r'\AppData\Roaming\7DaysToDie\GeneratedWorlds'
+    # path = user_home_dir + spath + '\\' + world_name + '\\'
 
     # 叠加图片
     img1 = Image.open(path + 'biomes.png')
@@ -44,7 +45,7 @@ if __name__ == '__main__':
 
     # 创建绘图对象
     draw = ImageDraw.Draw(img)
-    with open(res_path + 'points.json', 'r') as f:
+    with open(res_path + 'points.json', 'r', encoding='utf-8') as f:
         points = json.load(f)
 
     for point in points:

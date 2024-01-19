@@ -54,12 +54,20 @@ const curModel = computed(()=>{
 })
 
 const onSave = ()=>{
-  if(!selected_world.value) return
-  ipc.invoke('event_save_img', {
-    world: selected_world.value,
-    points: JSON.stringify(dataStore.points),
-    mapSize: dataStore.mapInfo.size
-  })
+  if(!selected_world.value && !dataStore.selectedPath) return
+  if(selected_world.value){
+    ipc.invoke('event_save_img', {
+      world: selected_world.value,
+      points: JSON.stringify(dataStore.points),
+      mapSize: dataStore.mapInfo.size
+    })
+  }else {
+    ipc.invoke('event_save_img', {
+      world: dataStore.selectedPath,
+      points: JSON.stringify(dataStore.points),
+      mapSize: dataStore.mapInfo.size
+    })
+  }
 }
 
 const browseWorld = async ()=>{
@@ -74,21 +82,52 @@ const browseWorld = async ()=>{
   }
 }
 
+const temp = {}
+for (const selcetionKey in configs.selcetions) {
+  temp[selcetionKey] = true
+}
+const selections = ref(temp)
+watch(selections,(newVal)=>{
+  if(enableSelection.value){
+    dataStore.setSelections(newVal)
+  }
+},{deep:true})
+const enableSelection = ref(false)
+watch(enableSelection,(newVal)=>{
+  if(newVal){ //开启筛选
+    dataStore.setSelections(selections.value)
+  }else {   //关闭筛选
+    dataStore.setSelections(undefined)
+  }
+})
 
 </script>
 
 
 
 <template>
-  <div style="width: 300px; height: 225px; background-color: #95d475; border: 2px solid black; overflow: hidden">
-    <img :src="imgRef" style="width: 300px; height: 225px; object-fit: fill">
+
+  <div style="width: 300px; height: 225px; background-color: #e7fad5; border: 2px solid black; overflow: hidden;
+      position: relative">
+    <img :src="imgRef" style="width: 300px; height: 225px; object-fit: fill" v-if="imgRef"/>
+    <el-empty :image-size="110" v-if="!imgRef" description="持续更新中&&免费软件&&开源" style="z-index: 5;
+              position: absolute; left: 50px; top: 0"/>
   </div>
-  <div style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; height: 420px;
-        position: relative; top: 0;">
-    <div style="color: #181818; font-size: 16px; font-weight: bolder">
-      {{curModel? curModel.name: '请选择一个地图'}}：{{curModel? curModel.clazz: ''}}
+
+  <!-- 提示 -->
+  <div style="display: flex; flex-direction: column; align-items: center">
+    <div style="color: #181818; font-size: 14px; font-weight: bolder; height: 20px">
+      {{curModel? curModel.clazz + '级': '--'}}&nbsp;{{curModel? '  ' + curModel.cname: '--'}}
     </div>
-    <div style="display: flex; justify-content: space-evenly; align-items: center">
+    <div style="color: #181818; font-size: 14px; font-weight: bolder; height: 20px">
+      {{curModel? curModel.name: '请选择一张地图:'}}
+    </div>
+  </div>
+
+
+  <div style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; height: 400px;
+        position: relative; top: 0; ">
+    <div style="display: flex; justify-content: space-evenly; align-items: center;">
       <el-select
           v-model="selected_world"
           class="m-2"
@@ -193,10 +232,22 @@ const browseWorld = async ()=>{
       </el-checkbox>
     </div>
 
-    <el-button type="success" plain style="margin-top: 10px" @click="onSave">保存图片</el-button>
-
+    <el-popover placement="top" :width="200" trigger="click">
+      <template #reference>
+        <el-button type="primary" plain >筛选建筑类型</el-button>
+      </template>
+      <el-checkbox v-model="enableSelection" label="启用筛选" />
+      <el-checkbox v-for="(value, key) in selections" v-model="selections[key]" :key="key" :disabled="!enableSelection">
+        {{configs.selcetions[key]}}
+      </el-checkbox>
+    </el-popover>
 
   </div>
+
+  <el-button type="success" plain style="margin-top: 10px; position: relative; left: 107px" @click="onSave">
+    保存地图
+  </el-button>
+
 
 </template>
 

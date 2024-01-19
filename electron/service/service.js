@@ -42,6 +42,7 @@ const getPoints = async (xmlPath, resPath) => {
         const x = init_x
         const y = init_y
         const name = jsonCSV[id].name
+        const cname = jsonCSV[id].cname
         let clazz, size, color
         if (id.startsWith('trader_')) {
             clazz = '6'
@@ -56,6 +57,7 @@ const getPoints = async (xmlPath, resPath) => {
         points.push({
             id: id,
             name: name,
+            cname: cname,
             clazz: clazz,
             size: size,
             color: color,
@@ -79,7 +81,7 @@ const parseCSV = (resPath) => {
         fs.createReadStream(resPath + '7days_models_info.csv')
             .pipe(parse({delimiter: ","}))
             .on("data", function (row) {
-                jsonCSV[row[0]] = {clazz: row[1], name: row[2]}
+                jsonCSV[row[0]] = {clazz: row[1], name: row[2], cname: row[3]}
             }).on('end', () => {
             resolve(jsonCSV)
         })

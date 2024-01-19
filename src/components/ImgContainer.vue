@@ -4,21 +4,20 @@ import {onMounted, ref, watch, computed} from "vue"
 import {useDataStore} from "@/stores"
 import {storeToRefs} from "pinia";
 
-
 const ipc = myApi.ipc
 const resPath = configs.env === 'dev' ? 'src/res/' : '../../../res/'
 const dataStore = useDataStore()
 const {selectedWorld} = storeToRefs(dataStore)  //确保不会丢失响应式
 watch(selectedWorld, async () => {
-  if(!selectedWorld.value) return
+  if (!selectedWorld.value) return
   resetContainer()
   await getImgAndPoints('world')
 
 })
 
 const {selectedPath} = storeToRefs(dataStore)
-watch(selectedPath,async ()=>{
-  if(!selectedPath.value) return
+watch(selectedPath, async () => {
+  if (!selectedPath.value) return
   resetContainer()
   await getImgAndPoints('path')
 })
@@ -28,7 +27,7 @@ const mapInfo = ref(undefined)
 const loadedWorlds = []
 const loadedPointsData = {}
 const getImgAndPoints = async (flag) => {
-  if(flag === 'world'){
+  if (flag === 'world') {
     if (loadedWorlds.includes(selectedWorld.value)) {
       imgSrc.value = resPath + 'pngs/' + selectedWorld.value + ' biomes.png'
       imgSrc2.value = resPath + 'pngs/' + selectedWorld.value + ' splat3.png'
@@ -51,16 +50,16 @@ const getImgAndPoints = async (flag) => {
       }
     }
     dataStore.setPoints(points.value)
-  }else {
+  } else {
     const worldName = selectedPath.value.split('\\').pop()
     const worldKeyName = worldName + '_key'
-    if(loadedWorlds.includes(worldKeyName)){
+    if (loadedWorlds.includes(worldKeyName)) {
       imgSrc.value = resPath + 'pngs/' + worldKeyName + ' biomes.png'
       imgSrc2.value = resPath + 'pngs/' + worldKeyName + ' splat3.png'
       points.value = loadedPointsData[worldKeyName].points
       dataStore.setMapInfo(loadedPointsData[worldKeyName].mapInfo)
       dataStore.setJsonCSV(loadedPointsData[worldKeyName].jsonCSV)
-    }else {
+    } else {
       const res = await ipc.invoke('event_get_img', selectedPath.value)
       imgSrc.value = res.data.biomes
       imgSrc2.value = res.data.splat3
@@ -80,11 +79,21 @@ const getImgAndPoints = async (flag) => {
 }
 
 const {classOptions} = storeToRefs(dataStore)
+const {selections} = storeToRefs(dataStore)
 const filter_points = computed(() => {
-  return points.value.filter(i => classOptions.value[i.clazz])
+  if (!selections.value) {  //筛选关闭
+    return points.value.filter(i => classOptions.value[i.clazz])
+  } else {
+    return points.value.filter(
+        i => classOptions.value[i.clazz]
+        && selections.value.hasOwnProperty(i.id.slice(0, -3))
+        && selections.value[i.id.slice(0, -3)]
+    )
+  }
+
 })
 
-const resetContainer = ()=>{
+const resetContainer = () => {
   w.value = configs.containerWidth
   h.value = configs.containerHeight
   left.value = 0
@@ -93,7 +102,6 @@ const resetContainer = ()=>{
   imgSrc2.value = ''
   points.value = []
 }
-
 
 const imgSrc = ref('')
 const imgSrc2 = ref('')
@@ -165,10 +173,17 @@ const computed_points = computed(() => {
   });
 });
 
-
 const onmouseenter = (e) => {
   const cur_id = e.target.getAttribute('text')
   dataStore.setCurId(cur_id)
+  const real_x = e.target.getAttribute('real_x')
+  const real_y = e.target.getAttribute('real_y')
+  const real_z = e.target.getAttribute('real_z')
+  dataStore.setCurPos({
+    real_x: real_x,
+    real_y: real_y,
+    real_z: real_z
+  })
 }
 
 
@@ -178,14 +193,14 @@ const onmouseenter = (e) => {
   <div style=" background-color: #c9c9c9; border: 2px solid black; overflow: hidden; position: relative;"
        :style="{width: configs.containerWidth + 'px', height: configs.containerHeight + 'px'}"
        @mousedown.prevent="onmousedown" @mouseup="onmouseup" @mousemove="onmousemove" @wheel="wheel">
+    <el-image style="width: 600px; height: 600px" src="https://t.mwm.moe/fj" fit="cover" v-if="!imgSrc"/>
 
-
-    <img v-bind:src="imgSrc"
+    <img v-bind:src="imgSrc" v-if="imgSrc"
          style="object-fit: fill; position: absolute; z-index: 1;"
          :style="{width: w + 'px', height: h + 'px', left: left + 'px', top: top + 'px'}"
     />
 
-    <img v-bind:src="imgSrc2"
+    <img v-bind:src="imgSrc2" v-if="imgSrc"
          style="object-fit: fill; position: absolute; z-index: 2;"
          :style="{width: w + 'px', height: h + 'px', left: left + 'px', top: top + 'px'}"
     />
@@ -200,7 +215,8 @@ const onmouseenter = (e) => {
           :style="{position: 'absolute', width: point.size + 'px', height: point.size + 'px', zIndex: point.clazz,
             backgroundColor: point.color, left: point.x - point.size/2 + 'px', top: point.y - point.size/2 + 'px'}"
           @mouseenter="onmouseenter"
-          :text="point.id"/>
+          :text="point.id" :real_x="point.real_x" :real_y="point.real_y" :real_z="point.real_z"
+      />
     </div>
 
   </div>

@@ -6,7 +6,7 @@ const {execSync, exec} = require('child_process')
 const {getPoints, processImg} = require('./service/service')
 
 
-const env = 'dev'
+const env = ''
 const resPath = env === 'dev'? 'src/res/': '../../../res/'      //前端
 const userhome = os.homedir()
 const gWorldPath = userhome + '\\AppData\\Roaming\\7DaysToDie\\GeneratedWorlds\\'
@@ -14,7 +14,7 @@ const gWorldPath = userhome + '\\AppData\\Roaming\\7DaysToDie\\GeneratedWorlds\\
 let win
 const createWindow = ()=>{
     win = new BrowserWindow({
-        width: 1200,     //908
+        width: 908,     //908
         height: 775,
         backgroundColor: '#ffffff',
         resizable: false,
@@ -27,7 +27,7 @@ const createWindow = ()=>{
 
     if (env === 'dev') {
         win.loadURL('http://localhost:5173/')
-        win.webContents.openDevTools()
+        //win.webContents.openDevTools()
     } else {
         win.loadFile('dist/index.html')
         //win.webContents.openDevTools()
@@ -79,7 +79,6 @@ ipcMain.handle('event_get_img', (__, world)=>{
                 worldPath = gWorldPath + world + '\\'
                 worldName = world
             }
-            console.log(worldPath)
             const targetPath = env === 'dev'? 'src/res/pngs/': 'res/pngs/'
             await processImg(worldPath, targetPath, worldName)
             resolve({
@@ -106,18 +105,27 @@ ipcMain.handle('event_get_points',(__, world)=>{
 ipcMain.handle('event_save_img',(__, params)=>{
 
     const {world, points, mapSize} = params
+    let worldName, worldPath
+    if(world.includes('\\')){
+        worldName = world.split('\\').pop() + '_key'
+        worldPath = world.replace(/\\/g,'\\\\') + '\\\\'        //!!!!!! 坑 !!!!!!!!
+    }else {
+        worldName = world
+        worldPath = gWorldPath + world + '\\\\'
+    }
     const options = {
         title: '另存为',
-        defaultPath: world + '.png',
+        defaultPath: worldName + '.png',
         buttonLabel: '保存',
         filters: [{ name: '图片文件', extensions: ['png'] }],
     }
     fs.writeFileSync(`${env === 'dev'? 'src\\res\\': 'res\\'}points.json`, points)
 
+    console.log(worldPath)
     dialog.showSaveDialog(win, options).then((result) => {
         if (!result.canceled) {
             const savePath = result.filePath;
-            const command = `ImgProcess \"${world}\" ${env === 'dev'? 'src\\res\\': 'res\\'} \"${savePath}\" ${mapSize}`
+            const command = `ImgProcess \"${worldPath}\" ${env === 'dev'? 'src\\res\\': 'res\\'} \"${savePath}\" ${mapSize}`
             exec(command, (error, stdout, stderr) => {
                 if (error || stderr) {
                     console.error(`command erro: ${error.message}`);

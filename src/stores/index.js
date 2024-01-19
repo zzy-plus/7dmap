@@ -51,6 +51,16 @@ export const useDataStore = defineStore('data', () => {
     selectedPath.value = newVal
   }
 
+  const curPos = ref(undefined)
+  const setCurPos = (newVal)=>{
+    curPos.value = newVal
+  }
+
+  const selections = ref(undefined)
+  const setSelections = (newVal)=>{
+    selections.value = newVal
+  }
+
 
 
 
@@ -68,7 +78,11 @@ export const useDataStore = defineStore('data', () => {
     points,
     setPoints,
     selectedPath,
-    setSelectedPath
+    setSelectedPath,
+    curPos,
+    setCurPos,
+    selections,
+    setSelections
 
   }
 })

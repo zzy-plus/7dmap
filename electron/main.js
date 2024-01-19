@@ -119,4 +119,8 @@ ipcMain.handle('event_save_img',(__, params)=>{
 
 })
 
+ipcMain.handle('event_browse_world',()=>{
+
+})
+
 

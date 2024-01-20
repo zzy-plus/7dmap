@@ -1,5 +1,11 @@
+apartments_02,5,Vanity Tower,虚荣大厦
+apartments_06,5,Tow Bit Tower,双子塔
+apartment_brick_6_flr,5,Brick Apartment,6层砖房
+factory_01,5,Shamway Factory,Shamway工厂
 factory_02,5,Shotgun Messiah Factory,Messiah霰弹枪工厂
 factory_03,5,Pop-N-Pills Factory,Pop-N-Pills工厂
+factory_lg_01,5,Shamway Factory,大型Shamway工厂
+factory_lg_02,5,Shotgun Messiah Factory,大型Messiah霰弹枪工厂
 hospital_01,5,Navezgane General Hospital,Navezgane综合医院
 hotel_ostrich,5,Ostrich Hotel,鸵鸟酒店
 house_modern_23,5,Dr. Karen Higashi Residence,Karen Higashi博士住宅
@@ -63,7 +69,7 @@ apartments_03,3,The Bend Apartments,班德公寓
 army_barracks_01,3,U.S. Army Post 7,美国陆军7号哨所
 army_camp_04,3,Fort Razor,雷泽堡4号军营
 bank_02,3,Seemore Bank,西莫尔银行
-bombshelter_02,3,Hexagon Hideaway,防空洞
+bombshelter_02,3,Hexagon Hideaway,防空洞02
 bowling_alley_02,3,Ballzstrike Bowling,Ballzstrike 保龄球馆
 cabin_20,3,The Fire Pit Lodge,壁炉小屋
 carlot_02,3,Carl's Cars,卡尔汽车公司
@@ -214,7 +220,7 @@ house_modern_14,2,The Bennett Residence,贝内特住宅
 house_modern_15,2,The Burnett Residence,伯内特住宅
 house_modern_16,2,The Haug Residence,豪格住宅
 house_modern_17,2,The Sinkhole House,沉孔屋
-house_modern_19,2,"The ""Broken Dreams"" house",“破碎的梦想”的房子
+house_modern_19,2,The "Broken Dreams" house,“破碎的梦想”的房子
 house_modern_22,2,The Johansen Residence,约翰森住宅
 house_modern_29,2,The Parkins-Jordaan Residence,Parkins Jordaan Residence
 house_old_bungalow_02,2,T. Thornbury Residence,T.Thornbury住宅
@@ -274,6 +280,39 @@ store_hardware_01,2,Working Stiff Tools,工作刚性工具
 utility_electric_co_01,2,Electric Co.,电气公司
 utility_substation_02,2,Hybrid Energy Substation 02,2号混合能源变电站
 warehouse_04,2,Blue Trailer Trucking,蓝色拖车运输
+house_old_victorian_13,2,Victorian House 13,破旧维多利亚房子13
+store_pawn_01,2,Vick Garisons Pawn,维克加里森斯典当行
+mp_waste_bldg_01_red,1,Red Wasted Building 01,红色废弃楼房01
+mp_waste_bldg_01_tan,1,Tan Wasted Building 01,棕色废弃楼房01
+mp_waste_bldg_01_white,1,White Wasted Building 01,白色废弃楼房01
+mp_waste_bldg_02_red,1,Red Wasted Building 02,红色废弃楼房02
+mp_waste_bldg_02_tan,1,Tan Wasted Building 01,棕色废弃楼房02
+mp_waste_bldg_04_grey,1,Grey Wasted Building 04,灰色废弃楼房04
+mp_waste_bldg_04_red,1,Red Wasted Building 04,红色废弃楼房04
+mp_waste_bldg_04_tan,1,Tan Wasted Building 04,棕色废弃楼房04
+mp_waste_bldg_04_white,1,White Wasted Building 04,白色废弃楼房04
+mp_waste_bldg_05_grey,1,Grey Wasted Building 05,灰色废弃楼房05
+mp_waste_bldg_06_grey,1,Grey Wasted Building 06,灰色废弃楼房06
+mp_waste_bldg_governer_08,1,Wasted Governer Building 08,废弃政府楼08
+park_skate,1,Skate Park ,滑板公园
+police_station1,1,Police Station ,警局
+post_office_med_01,1,MD Post Office 01,中型邮局
+post_office_sm_01,1,SM Post Office 01,小型邮局
+settlement_01,1,Settlement 01,聚集地
+skate_park_01,1,PowerBoost Skate Park,动力滑板公园
+store_salon,1,Zoe Salon,Zoe发廊
+junkyard_lg_01,1,LG Junkyard 01,1号大型垃圾场
+junkyard_med_01,1,MD Junkyard 01,1号中型垃圾场
+hotel_roadside_01,1,Roadside Hotel 01,路边酒店01
+hotel_roadside_02,1,Roadside Hotel 02,路边酒店02
+hotel_new_01,1,Hotel New 01,1号新酒店
+garage_01,1,Garage 01,1号车库
+garage_02,1,Garage 02,2号车库
+garage_07,1,Garage 07,7号车库
+church_graveyard1,1,church_graveyard,墓地教堂1
+bombshelter_md_01,1,Bombshell Md 01,林中防空洞
+bar_sm_01,1,Buzzs Bar,Buzzs酒吧
+apartment_adobe_red_5_flr,1,Red Adobe Apartment,5层红色土坯房
 bar_01,1,Buzz's Bar,巴斯酒吧
 cabin_01,1,Willy's Cabin,威利的小屋
 cabin_02,1,Marvin's Getaway,马文的逃亡

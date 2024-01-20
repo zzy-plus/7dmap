@@ -220,7 +220,7 @@ house_modern_14,2,The Bennett Residence,贝内特住宅
 house_modern_15,2,The Burnett Residence,伯内特住宅
 house_modern_16,2,The Haug Residence,豪格住宅
 house_modern_17,2,The Sinkhole House,沉孔屋
-house_modern_19,2,The "Broken Dreams" house,“破碎的梦想”的房子
+house_modern_19,2,The Broken Dreams house,“破碎的梦想”的房子
 house_modern_22,2,The Johansen Residence,约翰森住宅
 house_modern_29,2,The Parkins-Jordaan Residence,Parkins Jordaan Residence
 house_old_bungalow_02,2,T. Thornbury Residence,T.Thornbury住宅
@@ -767,11 +767,11 @@ street_tran_courtland,0,street_tran_courtland,street_tran_courtland
 survivor_camp_01,0,Camp BBQ,营地烧烤
 survivor_camp_02,0,Camp Bravo,布拉沃营地
 survivor_camp_03,0,Camp Cardinal,红衣主教营
-trader_bob,0,Trader Bob,交易员Bob
-trader_hugh,0,Trader Hugh,交易员休
-trader_jen,0,Trader Jen,交易员Jen
-trader_joel,0,Trader Joel,交易员Joel
-trader_rekt,0,Trader Rekt,交易员Rekt
+trader_bob,0,Trader Bob,商人Bob
+trader_hugh,0,Trader Hugh,商人Hugh
+trader_jen,0,Trader Jen,商人Jen
+trader_joel,0,Trader Joel,商人Joel
+trader_rekt,0,Trader Rekt,商人Rekt
 trailer_01,0,The Leonard Residence,伦纳德住宅
 trailer_02,0,The Bath Residence,巴斯住宅
 trailer_03,0,The Thumb Residence,拇指公寓

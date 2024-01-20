@@ -81,16 +81,20 @@ const getImgAndPoints = async (flag) => {
 const {classOptions} = storeToRefs(dataStore)
 const {selections} = storeToRefs(dataStore)
 const filter_points = computed(() => {
+  const points_filtered = points.value.filter(i => classOptions.value[i.clazz])
   if (!selections.value) {  //筛选关闭
-    return points.value.filter(i => classOptions.value[i.clazz])
-  } else {
-    return points.value.filter(
-        i => classOptions.value[i.clazz]
-        && selections.value.hasOwnProperty(i.id.slice(0, -3))
-        && selections.value[i.id.slice(0, -3)]
-    )
+    return points_filtered
+  } else {                  //筛选打开
+    const points_selected = []
+    for (const point of points_filtered) {
+      for (const selection of selections.value) {
+        if(point.id.startsWith(selection)){
+          points_selected.push(point)
+        }
+      }
+    }
+    return points_selected
   }
-
 })
 
 const resetContainer = () => {

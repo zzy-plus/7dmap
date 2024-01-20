@@ -82,11 +82,17 @@ const browseWorld = async ()=>{
   }
 }
 
+// checkbox
 const temp = {}
 for (const selcetionKey in configs.selcetions) {
   temp[selcetionKey] = true
 }
-const selections = ref(temp)
+const selec_checkbox = ref(temp)
+
+const selections = computed(()=>{
+  return Object.keys(selec_checkbox.value).filter(i=>selec_checkbox.value[i])
+})
+
 watch(selections,(newVal)=>{
   if(enableSelection.value){
     dataStore.setSelections(newVal)
@@ -237,7 +243,7 @@ watch(enableSelection,(newVal)=>{
         <el-button type="primary" plain >筛选建筑类型</el-button>
       </template>
       <el-checkbox v-model="enableSelection" label="启用筛选" />
-      <el-checkbox v-for="(value, key) in selections" v-model="selections[key]" :key="key" :disabled="!enableSelection">
+      <el-checkbox v-for="(value, key) in selec_checkbox" v-model="selec_checkbox[key]" :key="key" :disabled="!enableSelection">
         {{configs.selcetions[key]}}
       </el-checkbox>
     </el-popover>

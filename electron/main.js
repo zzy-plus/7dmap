@@ -1,4 +1,4 @@
-const {app, BrowserWindow, ipcMain, dialog} = require('electron')
+const {app, BrowserWindow, ipcMain, dialog, Menu} = require('electron')
 const path = require('path')
 const os = require('os')
 const fs = require('fs')
@@ -6,10 +6,31 @@ const {execSync, exec} = require('child_process')
 const {getPoints, processImg} = require('./service/service')
 
 
-const env = ''
+const env = 'dev'
 const resPath = env === 'dev'? 'src/res/': '../../../res/'      //前端
 const userhome = os.homedir()
 const gWorldPath = userhome + '\\AppData\\Roaming\\7DaysToDie\\GeneratedWorlds\\'
+
+const mainMenu = Menu.buildFromTemplate([
+    {
+        label: '🔩选项',
+        submenu: [
+            {
+                label: '关于',
+                role: "about"
+            },
+            {
+                label: '退出',
+                role: "quit"
+            }
+        ]
+    },
+    {
+        label: '😳搜索建筑(Ctrl+F)',
+        click: ()=> showSearchDlg(),
+        accelerator: 'CmdOrCtrl+F'
+    }
+])
 
 let win
 const createWindow = ()=>{
@@ -27,16 +48,22 @@ const createWindow = ()=>{
 
     if (env === 'dev') {
         win.loadURL('http://localhost:5173/')
-        win.webContents.openDevTools()
+        //win.webContents.openDevTools()
     } else {
         win.loadFile('dist/index.html')
         //win.webContents.openDevTools()
     }
+
+    Menu.setApplicationMenu(mainMenu)
 }
 
 app.whenReady().then(() => {
     createWindow()
 })
+
+const showSearchDlg = ()=>{
+    win.webContents.send('e_search_dialog','')
+}
 
 app.on('window-all-closed', () => {
     app.quit()
@@ -150,6 +177,15 @@ ipcMain.handle('event_browse_world',()=>{
         }).catch(err => {
             resolve({status: false, data: undefined, msg: '打开路径选择对话框时发生错误'})
         });
+    })
+})
+
+ipcMain.handle('event_search_data',(__, modelName)=>{
+
+    return new Promise((resolve,reject)=>{
+
+
+        resolve(0)
     })
 })
 

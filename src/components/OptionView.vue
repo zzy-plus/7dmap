@@ -2,7 +2,7 @@
 import {ref, onMounted, computed, watch} from "vue"
 import {useDataStore} from "@/stores"
 import {storeToRefs} from "pinia"
-import configs from "@/configs";
+import configs from "@/configs"
 
 const dataStore = useDataStore()
 const ipc = myApi.ipc
@@ -19,7 +19,12 @@ onMounted(async ()=>{
   if (status){
     world_options.value = data
   }else {
-    ElMessage.error(msg)
+    ElMessage({
+      type: 'error',
+      message: msg,
+      showClose: true,
+      duration: 4000
+    })
     world_options.value = []
   }
 })

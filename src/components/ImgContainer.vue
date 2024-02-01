@@ -125,10 +125,22 @@ const onmousemove = (e) => {
     if (!move_limited) {
       move_limited = setTimeout(() => {
         //对拖拽行为的限制
-        if (left.value >= configs.containerWidth - 100 && e.movementX > 0) return;
-        if (left.value + w.value <= 100 && e.movementX < 0) return;
-        if (top.value >= configs.containerWidth - 100 && e.movementY > 0) return;
-        if (top.value + h.value <= 100 && e.movementY < 0) return;
+        if (left.value >= configs.containerWidth - 100 && e.movementX > 0) {
+          move_limited = undefined
+          return;
+        }
+        else if (left.value + w.value <= 100 && e.movementX < 0) {
+          move_limited = undefined
+          return;
+        }
+        if (top.value >= configs.containerWidth - 100 && e.movementY > 0) {
+          move_limited = undefined
+          return;
+        }
+        else if (top.value + h.value <= 100 && e.movementY < 0) {
+          move_limited = undefined
+          return;
+        }
         left.value += e.movementX
         top.value += e.movementY
         move_limited = undefined

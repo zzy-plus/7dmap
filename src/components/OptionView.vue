@@ -8,16 +8,18 @@ const dataStore = useDataStore()
 const ipc = myApi.ipc
 const selected_world = ref(undefined)
 const onSelectedWorldChange = (newWorld) => {
-  dataStore.setSelectedWorld(newWorld)
-  dataStore.setSelectedPath(undefined)
+  dataStore.setSelectedWorld(worlCollection[newWorld])
+
 }
 
 
 const world_options = ref([])
+let worlCollection = null
 onMounted(async ()=>{
   const {status, data, msg} = await ipc.invoke('event_get_worlds','')
   if (status){
-    world_options.value = data
+    worlCollection = data
+    world_options.value = Object.keys(data)
   }else {
     ElMessage({
       type: 'error',
@@ -79,8 +81,8 @@ const browseWorld = async ()=>{
   const {status, data, msg} = await ipc.invoke('event_browse_world','')
   if(status){
     if(!data) return;
-    dataStore.setSelectedPath(data)
-    dataStore.setSelectedWorld(undefined)
+    dataStore.setSelectedWorld(data)
+
     selected_world.value = null
   }else {
     ElMessage.error(msg)

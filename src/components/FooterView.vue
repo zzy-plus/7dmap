@@ -1,9 +1,14 @@
 <script setup>
 import {useDataStore} from "@/stores";
 import {storeToRefs} from "pinia";
+import {ref, computed} from "vue";
 
 const dataStore = useDataStore()
 const {mapInfo} = storeToRefs(useDataStore())
+
+const mapName = computed(()=>{
+  return mapInfo.value.name.split('\\').slice(-1)[0]
+})
 
 const {curPos} = storeToRefs(useDataStore())
 
@@ -24,7 +29,7 @@ const {curPos} = storeToRefs(useDataStore())
       <div style="display: flex; justify-content: space-evenly; width: 600px;
            font-size: 14px;  color: #E6A23C; margin-top: 5px">
         <div style="font-weight: bold">
-          世界名称：{{mapInfo.name}}
+          世界名称：{{mapName}}
         </div>
         <div style="font-weight: bold">
           大小：{{mapInfo.size}}&nbsp;x&nbsp;{{mapInfo.size}}

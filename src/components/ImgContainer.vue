@@ -7,75 +7,52 @@ import {storeToRefs} from "pinia";
 const ipc = myApi.ipc
 const resPath = configs.env === 'dev' ? 'src/res/' : '../../../res/'
 const dataStore = useDataStore()
+
 const {selectedWorld} = storeToRefs(dataStore)  //确保不会丢失响应式
-watch(selectedWorld, async () => {
+watch(selectedWorld, async (newVal) => {
   if (!selectedWorld.value) return
   resetContainer()
-  await getImgAndPoints('world')
-
+  await getImgAndPoints(newVal)
 })
 
-const {selectedPath} = storeToRefs(dataStore)
-watch(selectedPath, async () => {
-  if (!selectedPath.value) return
-  resetContainer()
-  await getImgAndPoints('path')
-})
+// const {selectedPath} = storeToRefs(dataStore)
+// watch(selectedPath, async () => {
+//   if (!selectedPath.value) return
+//   resetContainer()
+//   await getImgAndPoints('path')
+// })
 
 const points = ref([])
 const mapInfo = ref(undefined)
 const loadedWorlds = []
 const loadedPointsData = {}
-const getImgAndPoints = async (flag) => {
-  if (flag === 'world') {
-    if (loadedWorlds.includes(selectedWorld.value)) {
-      imgSrc.value = resPath + 'pngs/' + selectedWorld.value + ' biomes.png'
-      imgSrc2.value = resPath + 'pngs/' + selectedWorld.value + ' splat3.png'
-      points.value = loadedPointsData[selectedWorld.value].points
-      dataStore.setMapInfo(loadedPointsData[selectedWorld.value].mapInfo)
-      dataStore.setJsonCSV(loadedPointsData[selectedWorld.value].jsonCSV)
-    } else {
-      const res = await ipc.invoke('event_get_img', selectedWorld.value)
-      imgSrc.value = res.data.biomes
-      imgSrc2.value = res.data.splat3
-      const {status, data, msg} = await ipc.invoke('event_get_points', selectedWorld.value)
-      points.value = data.points
-      dataStore.setMapInfo({...data.info, name: selectedWorld.value})
-      dataStore.setJsonCSV(data.jsonCSV)
-      loadedWorlds.push(selectedWorld.value)
-      loadedPointsData[selectedWorld.value] = {
-        points: points.value,
-        mapInfo: {...data.info, name: selectedWorld.value},
-        jsonCSV: data.jsonCSV
-      }
-    }
-    dataStore.setPoints(points.value)
+const getImgAndPoints = async (worldPath) => {
+
+  const res = await ipc.invoke('event_get_img', worldPath)
+
+  imgSrc.value = `data:image/jpeg;base64,${res.data.biomes}`
+  imgSrc2.value = `data:image/jpeg;base64,${res.data.splat3}`
+
+  if (loadedWorlds.includes(worldPath)) {
+
+    points.value = loadedPointsData[worldPath].points
+    dataStore.setMapInfo(loadedPointsData[worldPath].mapInfo)
+    dataStore.setJsonCSV(loadedPointsData[worldPath].jsonCSV)
   } else {
-    const worldName = selectedPath.value.split('\\').pop()
-    const worldKeyName = worldName + '_key'
-    if (loadedWorlds.includes(worldKeyName)) {
-      imgSrc.value = resPath + 'pngs/' + worldKeyName + ' biomes.png'
-      imgSrc2.value = resPath + 'pngs/' + worldKeyName + ' splat3.png'
-      points.value = loadedPointsData[worldKeyName].points
-      dataStore.setMapInfo(loadedPointsData[worldKeyName].mapInfo)
-      dataStore.setJsonCSV(loadedPointsData[worldKeyName].jsonCSV)
-    } else {
-      const res = await ipc.invoke('event_get_img', selectedPath.value)
-      imgSrc.value = res.data.biomes
-      imgSrc2.value = res.data.splat3
-      const {status, data, msg} = await ipc.invoke('event_get_points', selectedPath.value)
-      points.value = data.points
-      dataStore.setMapInfo({...data.info, name: worldName})
-      dataStore.setJsonCSV(data.jsonCSV)
-      loadedWorlds.push(worldKeyName)
-      loadedPointsData[worldKeyName] = {
-        points: points.value,
-        mapInfo: {...data.info, name: worldName},
-        jsonCSV: data.jsonCSV
-      }
+
+    const {status, data, msg} = await ipc.invoke('event_get_points', worldPath)
+    points.value = data.points
+    dataStore.setMapInfo({...data.info, name: worldPath})
+    dataStore.setJsonCSV(data.jsonCSV)
+    loadedWorlds.push(worldPath)
+    loadedPointsData[worldPath] = {
+      points: points.value,
+      mapInfo: {...data.info, name: worldPath},
+      jsonCSV: data.jsonCSV
     }
-    dataStore.setPoints(points.value)
   }
+  dataStore.setPoints(points.value)
+
 }
 
 const {classOptions} = storeToRefs(dataStore)

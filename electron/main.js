@@ -35,20 +35,22 @@ const mainMenu = Menu.buildFromTemplate([
 let win
 const createWindow = ()=>{
     win = new BrowserWindow({
-        width: 908,     //908
+        width: 1200,     //908
         height: 775,
         backgroundColor: '#ffffff',
         resizable: false,
         icon: './assets/7dico.ico',
         webPreferences: {
             preload: path.resolve(__dirname, 'preload.js'),
-            sandbox: false
+            sandbox: false,
+            nodeIntegration: true,
+            enableRemoteModule: true
         }
     })
 
     if (env === 'dev') {
         win.loadURL('http://localhost:5173/')
-        //win.webContents.openDevTools()
+        win.webContents.openDevTools()
     } else {
         win.loadFile('dist/index.html')
         //win.webContents.openDevTools()
@@ -74,13 +76,13 @@ ipcMain.handle('event_get_worlds', ()=>{
     return new Promise((resolve,reject)=>{
         try {
             const files = fs.readdirSync(gWorldPath)
-            const worlds = []
+            const worlds = {}
             for (const file of files) {
                 if(file.startsWith('My Level')) continue;
                 try {
                     let items = fs.readdirSync(gWorldPath + file)
                     if(items.includes('biomes.png')){
-                        worlds.push(file)
+                        worlds[file] = gWorldPath + file
                     }
                 }catch (err){continue}
             }
@@ -107,13 +109,10 @@ ipcMain.handle('event_get_img', (__, world)=>{
                 worldName = world
             }
             const targetPath = env === 'dev'? 'src/res/pngs/': 'res/pngs/'
-            await processImg(worldPath, targetPath, worldName)
+            const data = processImg(worldPath)
             resolve({
                 status: true,
-                data: {
-                    biomes: resPath + 'pngs/' + worldName + ' biomes.png',
-                    splat3: resPath + 'pngs/' + worldName + ' splat3.png'
-                },
+                data: data,
                 msg: ''
             })
         }catch (err){}
@@ -121,9 +120,9 @@ ipcMain.handle('event_get_img', (__, world)=>{
     })
 })
 
-ipcMain.handle('event_get_points',(__, world)=>{
+ipcMain.handle('event_get_points',(__, worldPath)=>{
     return new Promise(async (resolve,reject)=>{
-        const worldPath = world.includes('\\')? world + '\\': gWorldPath + world + '\\'
+
         const data = await getPoints( worldPath, env === 'dev'? 'src/res/': 'res/')
         resolve({status: true, data: data, msg:''})
     })

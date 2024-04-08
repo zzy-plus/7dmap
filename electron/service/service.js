@@ -91,7 +91,7 @@ const parseCSV = (resPath) => {
 //处理xml文件，获取id、name、poi等信息
 const parseXmlFiles = (xmlPath) => {
 
-    const xmlPrefabs = fs.readFileSync(xmlPath + 'prefabs.xml', 'utf-8')
+    const xmlPrefabs = fs.readFileSync(xmlPath + '\\prefabs.xml', 'utf-8')
     const jsonPrefabs = JSON.parse(xmljs.xml2json(xmlPrefabs, {compact: true}))
     const decorations = jsonPrefabs.prefabs.decoration
     /*
@@ -104,7 +104,7 @@ const parseXmlFiles = (xmlPath) => {
         }
       },...]
     */
-    const xmlMapInfo = fs.readFileSync(xmlPath + 'map_info.xml', 'utf-8')
+    const xmlMapInfo = fs.readFileSync(xmlPath + '\\map_info.xml', 'utf-8')
     const jsonMapInfo = JSON.parse(xmljs.xml2json(xmlMapInfo, {compact: true}))
     const properties = jsonMapInfo.MapInfo.property
     const mapInfo = {}
@@ -121,17 +121,15 @@ const parseXmlFiles = (xmlPath) => {
 }
 
 //底图处理
-const processImg = async (source, target, world) => {
+const processImg = (source) => {
 
-    return new Promise(async (resolve, reject) => {
+    const file1 = fs.readFileSync(source + 'biomes.png')
+    const file2 = fs.readFileSync(source + 'splat3.png')
 
-        const file1 = fs.readFileSync(source + 'biomes.png')
-        fs.writeFileSync(target + world + ' biomes.png', file1)
-        const file2 = fs.readFileSync(source + 'splat3.png')
-        fs.writeFileSync(target + world + ' splat3.png', file2)
-
-        resolve(0)
-    })
+    return {
+        biomes: Buffer.from(file1).toString('base64'),
+        splat3: Buffer.from(file2).toString('base64')
+    }
 }
 
 module.exports = {

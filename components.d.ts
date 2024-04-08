@@ -19,6 +19,7 @@ declare module 'vue' {
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElTag: typeof import('element-plus/es')['ElTag']
+    ElTooltip: typeof import('element-plus/es')['ElTooltip']
     FooterView: typeof import('./src/components/FooterView.vue')['default']
     ImgContainer: typeof import('./src/components/ImgContainer.vue')['default']
     OptionView: typeof import('./src/components/OptionView.vue')['default']

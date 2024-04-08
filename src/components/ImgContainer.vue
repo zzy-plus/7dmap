@@ -30,8 +30,8 @@ const getImgAndPoints = async (worldPath) => {
 
   const res = await ipc.invoke('event_get_img', worldPath)
 
-  imgSrc.value = `data:image/jpeg;base64,${res.data.biomes}`
-  imgSrc2.value = `data:image/jpeg;base64,${res.data.splat3}`
+  imgSrc.value = res.data.biomes? `data:image/jpeg;base64,${res.data.biomes}`: undefined
+  imgSrc2.value = res.data.splat3? `data:image/jpeg;base64,${res.data.splat3}`: undefined
 
   if (loadedWorlds.includes(worldPath)) {
 
@@ -79,13 +79,13 @@ const resetContainer = () => {
   h.value = configs.containerHeight
   left.value = 0
   top.value = 0
-  imgSrc.value = ''
-  imgSrc2.value = ''
+  imgSrc.value = undefined
+  imgSrc2.value = undefined
   points.value = []
 }
 
-const imgSrc = ref('')
-const imgSrc2 = ref('')
+const imgSrc = ref(undefined)
+const imgSrc2 = ref(undefined)
 
 const w = ref(configs.containerWidth)
 const h = ref(configs.containerHeight)
@@ -193,7 +193,7 @@ const onmouseenter = (e) => {
          :style="{width: w + 'px', height: h + 'px', left: left + 'px', top: top + 'px'}"
     />
 
-    <img v-bind:src="imgSrc2" v-if="imgSrc"
+    <img v-bind:src="imgSrc2" v-if="imgSrc2"
          style="object-fit: fill; position: absolute; z-index: 2;"
          :style="{width: w + 'px', height: h + 'px', left: left + 'px', top: top + 'px'}"
     />

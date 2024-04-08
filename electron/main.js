@@ -95,20 +95,10 @@ ipcMain.handle('event_get_worlds', ()=>{
 })
 
 
-ipcMain.handle('event_get_img', (__, world)=>{
+ipcMain.handle('event_get_img', (__, worldPath)=>{
 
     return new Promise(async (resolve,reject)=>{
         try{
-            let worldPath
-            let worldName
-            if(world.includes('\\')){   //如果传过来的是路径，表明使用的是手动选择
-                worldPath = world + '\\'
-                worldName = world.split('\\').pop() + '_key'
-            }else {
-                worldPath = gWorldPath + world + '\\'
-                worldName = world
-            }
-            const targetPath = env === 'dev'? 'src/res/pngs/': 'res/pngs/'
             const data = processImg(worldPath)
             resolve({
                 status: true,

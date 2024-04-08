@@ -123,12 +123,30 @@ const parseXmlFiles = (xmlPath) => {
 //底图处理
 const processImg = (source) => {
 
-    const file1 = fs.readFileSync(source + 'biomes.png')
-    const file2 = fs.readFileSync(source + 'splat3.png')
+    let biomes, splat3
+
+    try{
+        const file1 = fs.readFileSync(source + '\\biomes.png')
+        biomes = Buffer.from(file1).toString('base64')
+    }catch (e){console.log(e.message)}
+
+    let flag = false
+    try {
+        const file2 = fs.readFileSync(source + '\\splat3.png')
+        splat3 = Buffer.from(file2).toString('base64')
+        flag = true
+    }catch (e){console.log(e.message)}
+
+    if(!flag){
+        try{
+            const file3 = fs.readFileSync(source + '\\splat3_processed.png')
+            splat3 = Buffer.from(file3).toString('base64')
+        }catch (e) {console.log(e.message)}
+    }
 
     return {
-        biomes: Buffer.from(file1).toString('base64'),
-        splat3: Buffer.from(file2).toString('base64')
+        biomes: biomes,
+        splat3: splat3
     }
 }
 

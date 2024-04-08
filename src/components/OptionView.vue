@@ -114,6 +114,12 @@ watch(enableSelection,(newVal)=>{
   }
 })
 
+
+const isServerMap = ref(false)
+watch(isServerMap, (val)=>{
+
+})
+
 </script>
 
 
@@ -162,6 +168,19 @@ watch(enableSelection,(newVal)=>{
           手动选择
         </el-button>
       </div>
+
+    </div>
+
+    <div >
+      <el-tooltip
+          class="box-item"
+          effect="dark"
+          content="勾选此选项后，下拉框中显示的世界均为从公共服务器下载的地图"
+          placement="top"
+      >
+        <el-checkbox v-model="isServerMap" label="服务器缓存地图"
+                     style="margin: 0; position: relative; left: -60px; color: #f5ab11" />
+      </el-tooltip>
 
     </div>
 

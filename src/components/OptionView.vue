@@ -15,8 +15,21 @@ const onSelectedWorldChange = (newWorld) => {
 
 const world_options = ref([])
 let worlCollection = null
-onMounted(async ()=>{
-  const {status, data, msg} = await ipc.invoke('event_get_worlds','')
+onMounted(()=>{
+  getWorlds(false)
+})
+
+const getWorlds = async (flag)=>{
+  /**
+   * flag == true: 服务器地图
+   * flag == false: 本地地图
+   */
+  let status, data, msg
+  if(flag){
+    ({status, data, msg} = await ipc.invoke('event_get_server_worlds',''))
+  }else {
+    ({status, data, msg} = await ipc.invoke('event_get_worlds',''))
+  }
   if (status){
     worlCollection = data
     world_options.value = Object.keys(data)
@@ -29,7 +42,7 @@ onMounted(async ()=>{
     })
     world_options.value = []
   }
-})
+}
 
 
 const classOptions = ref({
@@ -117,7 +130,8 @@ watch(enableSelection,(newVal)=>{
 
 const isServerMap = ref(false)
 watch(isServerMap, (val)=>{
-
+  selected_world.value = null
+  getWorlds(val)
 })
 
 </script>
@@ -176,7 +190,7 @@ watch(isServerMap, (val)=>{
           class="box-item"
           effect="dark"
           content="勾选此选项后，下拉框中显示的世界均为从公共服务器下载的地图"
-          placement="top"
+          placement="bottom"
       >
         <el-checkbox v-model="isServerMap" label="服务器缓存地图"
                      style="margin: 0; position: relative; left: -60px; color: #f5ab11" />

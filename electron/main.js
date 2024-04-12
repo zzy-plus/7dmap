@@ -10,6 +10,7 @@ const env = 'dev'
 const resPath = env === 'dev'? 'src/res/': '../../../res/'      //前端
 const userhome = os.homedir()
 const gWorldPath = userhome + '\\AppData\\Roaming\\7DaysToDie\\GeneratedWorlds\\'
+const savesLocalPath = userhome + '\\AppData\\Roaming\\7DaysToDie\\SavesLocal'
 
 const mainMenu = Menu.buildFromTemplate([
     {
@@ -175,6 +176,28 @@ ipcMain.handle('event_search_data',(__, modelName)=>{
 
 
         resolve(0)
+    })
+})
+
+ipcMain.handle('event_get_server_worlds', ()=>{
+    return new Promise((resolve,reject)=>{
+        try {
+            const files = fs.readdirSync(savesLocalPath)
+            const worlds = {}
+            for (const file of files) {
+
+                try {
+                    let items = fs.readdirSync(savesLocalPath + '\\' + file)
+                    if(items.includes('World')){
+                        worlds[file] = `${savesLocalPath}\\${file}\\World`
+                    }
+                }catch (err){continue}
+            }
+            resolve({status: true, data: worlds, msg:''})
+        }catch (err){
+            console.log('read worlds files failed: ', err.message)
+            resolve({status: false, data: null, msg: '读取世界文件夹失败，请使用手动选择'})
+        }
     })
 })
 

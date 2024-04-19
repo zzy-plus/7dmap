@@ -6,7 +6,7 @@ const {execSync, exec} = require('child_process')
 const {getPoints, processImg} = require('./service/service')
 
 
-const env = 'dev'
+const env = ''
 const resPath = env === 'dev'? 'src/res/': '../../../res/'      //前端
 const userhome = os.homedir()
 const gWorldPath = userhome + '\\AppData\\Roaming\\7DaysToDie\\GeneratedWorlds\\'
@@ -36,7 +36,7 @@ const mainMenu = Menu.buildFromTemplate([
 let win
 const createWindow = ()=>{
     win = new BrowserWindow({
-        width: 1200,     //908
+        width: 908,     //908
         height: 775,
         backgroundColor: '#ffffff',
         resizable: false,

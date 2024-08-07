@@ -3,9 +3,8 @@ import {useDataStore} from "@/stores";
 import {storeToRefs} from "pinia";
 import {ref, computed} from "vue";
 
-const dataStore = useDataStore()
-const {mapInfo} = storeToRefs(useDataStore())
 
+const {mapInfo} = storeToRefs(useDataStore())
 const mapName = computed(()=>{
   return mapInfo.value.name.split('\\').slice(-1)[0]
 })
@@ -27,7 +26,7 @@ const {curPos} = storeToRefs(useDataStore())
 
     <div style="position: relative; top: 5px">
       <div style="display: flex; justify-content: space-evenly; width: 600px;
-           font-size: 14px;  color: #E6A23C; margin-top: 5px">
+           font-size: 14px;  color: #ff8437; margin-top: 5px">
         <div style="font-weight: bold">
           世界名称：{{mapName}}
         </div>
@@ -36,7 +35,7 @@ const {curPos} = storeToRefs(useDataStore())
         </div>
       </div>
       <div style="display: flex; justify-content: space-evenly; width: 600px;
-           font-size: 14px; color: #E6A23C; margin-top: 5px">
+           font-size: 14px; color: #ff8437; margin-top: 5px">
         <div style="font-weight: bold">
           版本：{{mapInfo.version}}
         </div>

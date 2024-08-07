@@ -19,16 +19,26 @@ myApi.ipcListen('e_search_dialog',(e, msg)=>{
 
 const getSearchData = async ()=>{
   const points = dataStore.points
+  console.log(points.length)
   const tempTableData = []
   for (const point of points) {
-    if(!point.name.toLowerCase().includes(modelName.value.toLowerCase())) continue
-    tempTableData.push({
-      id: point.id,
-      name: point.name,
-      cname: point.cname,
-      clazz: point.clazz,
-      position: `(${point.real_x},${point.real_y},${point.real_z})`
-    })
+    if(point.name.toLowerCase().includes(modelName.value.toLowerCase())){
+      tempTableData.push({
+        id: point.id,
+        name: point.name,
+        cname: point.cname,
+        clazz: point.clazz,
+        position: `(${point.real_x},${point.real_y},${point.real_z})`
+      })
+    }else if(point.cname.includes(modelName.value)){
+      tempTableData.push({
+        id: point.id,
+        name: point.name,
+        cname: point.cname,
+        clazz: point.clazz,
+        position: `(${point.real_x},${point.real_y},${point.real_z})`
+      })
+    }
   }
   tableData.value = tempTableData
 
@@ -48,14 +58,14 @@ const getSearchData = async ()=>{
 
     <template #default>
       <div style=" margin-bottom: 10px; display: flex">
-        <el-tag type="danger">
-          注意：仅支持英文名称搜索
+        <el-tag type="success">
+          支持中/英文模糊搜索
         </el-tag>
-        <el-tag type="warning" style="margin-left: 5px">
-          需要先在主页面选择一个世界
+        <el-tag type="danger" style="margin-left: 5px">
+          需要先在主页面选择一个世界!
         </el-tag>
       </div>
-      <el-input v-model="modelName" placeholder="输入建筑英文名称" style="width: 180px; margin-right: 10px"/>
+      <el-input v-model="modelName" placeholder="输入建筑关键词 [中or英]" style="width: 180px; margin-right: 10px"/>
       <el-button type="primary" @click="getSearchData">搜索</el-button>
 
       <el-table :data="tableData" height="600" style="width: 100%; margin-top: 5px" border>

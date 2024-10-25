@@ -212,15 +212,16 @@ const onmouseenter = (e) => {
        @mousedown.prevent="onmousedown" @mouseup="onmouseup" @mousemove="onmousemove" @wheel="wheel">
     <el-image style="width: 600px; height: 600px" src="https://t.mwm.moe/fj" fit="cover" v-if="!imgSrc"/>
 
-    <img v-bind:src="imgSrc" v-if="imgSrc"
-         style="object-fit: fill; position: absolute; z-index: 1;"
-         :style="imgStyleObj"
-    />
+    <!-- 图片过大导致的缩放卡顿 -->
+<!--    <img v-bind:src="imgSrc" v-if="imgSrc"-->
+<!--         style="object-fit: fill; position: absolute; z-index: 1;"-->
+<!--         :style="imgStyleObj"-->
+<!--    />-->
 
-    <img v-bind:src="imgSrc2" v-if="imgSrc2"
-         style="object-fit: fill; position: absolute; z-index: 2;"
-         :style="imgStyleObj"
-    />
+<!--    <img v-bind:src="imgSrc2" v-if="imgSrc2"-->
+<!--         style="object-fit: fill; position: absolute; z-index: 2;"-->
+<!--         :style="imgStyleObj"-->
+<!--    />-->
 
 
     <div ref="div1" style="position: absolute; z-index: 3"

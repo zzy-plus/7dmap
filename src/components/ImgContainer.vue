@@ -137,10 +137,28 @@ const onmouseup = () => {
   down.value = false
 }
 
+let scaleFactor = 1.0
+const styleObj = ref({
+  transform: `scale(${scaleFactor})`,
+  width: '600px',
+  height: '600px',
+  left: '0px',
+  top: '0px',
+  transition: 'transform 0.3s ease'
+})
 const wheel = (e) => {
   if (!wheel_limited) {
     wheel_limited = setTimeout(() => {
       if (e.deltaY < -1) { //滚轮向上
+        scaleFactor += 0.5
+        styleObj.value = {
+          transform: `scale(${scaleFactor})`,
+          width: '600px',
+          height: '600px',
+          left: '0px',
+          top: '0px',
+          transition: 'transform 0.3s ease'
+        }
         w.value += zoomStep
         h.value += zoomStep
         left.value -= e.offsetX / w.value * zoomStep
@@ -154,9 +172,24 @@ const wheel = (e) => {
         }
       }
       wheel_limited = undefined
-    }, 50)
+    }, 100)
   }
+
 }
+
+
+let timer = undefined
+const pointsVisible = ref(true)
+watch(w,()=>{
+  pointsVisible.value = false
+  if(timer){
+    clearTimeout(timer)
+  }
+  timer = setTimeout(()=>{
+    pointsVisible.value = true
+    timer = undefined
+  }, 200)
+})
 
 const computed_points = computed(() => {
   return filter_points.value.map(point => {
@@ -188,18 +221,19 @@ const onmouseenter = (e) => {
        @mousedown.prevent="onmousedown" @mouseup="onmouseup" @mousemove="onmousemove" @wheel="wheel">
     <el-image style="width: 600px; height: 600px" src="https://t.mwm.moe/fj" fit="cover" v-if="!imgSrc"/>
 
-    <img v-bind:src="imgSrc" v-if="imgSrc"
+    <!--:style="{width: w + 'px', height: h + 'px', left: left + 'px', top: top + 'px'}-->
+    <img v-bind:src="imgSrc" v-show="imgSrc"
          style="object-fit: fill; position: absolute; z-index: 1;"
-         :style="{width: w + 'px', height: h + 'px', left: left + 'px', top: top + 'px'}"
+         :style="styleObj"
     />
 
-    <img v-bind:src="imgSrc2" v-if="imgSrc2"
+    <img v-bind:src="imgSrc2" v-show="imgSrc2"
          style="object-fit: fill; position: absolute; z-index: 2;"
-         :style="{width: w + 'px', height: h + 'px', left: left + 'px', top: top + 'px'}"
+         :style="styleObj"
     />
 
 
-    <div ref="div1" style="position: absolute; z-index: 3"
+    <div ref="div1" style="position: absolute; z-index: 3" v-if="false"
          :style="{width: w+'px', height: h+'px', left: left + 'px', top: top + 'px'}">
 
       <div
@@ -220,6 +254,9 @@ const onmouseenter = (e) => {
 canvas {
   border: 1px solid #000; /* 为了演示，添加一个边框 */
 }
+
+
+
 </style>
 
 

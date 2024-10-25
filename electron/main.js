@@ -4,39 +4,51 @@ const os = require('os')
 const fs = require('fs')
 const {execSync, exec} = require('child_process')
 const {getPoints, processImg} = require('./service/service')
+const http = require('http');
 
 
-const env = 'dev'
-const resPath = env === 'dev'? 'src/res/': '../../../res/'      //前端
+const env = app.isPackaged? '': 'dev'
+//const resPath = env === 'dev'? 'src/res/': '../../../res/'      //前端
 const userhome = os.homedir()
 const gWorldPath = userhome + '\\AppData\\Roaming\\7DaysToDie\\GeneratedWorlds\\'
 const savesLocalPath = userhome + '\\AppData\\Roaming\\7DaysToDie\\SavesLocal'
+let guideUrl = 'www.baidu.com'
 
 const mainMenu = Menu.buildFromTemplate([
     {
-        label: '🔩选项',
-        submenu: [
-            {
-                label: '关于',
-                role: "about"
-            },
-            {
-                label: '退出',
-                role: "quit"
-            }
-        ]
+        label: '😳关于',
+        click: ()=>{
+            dialog.showMessageBox({
+            type: 'info',
+            title: '关于',
+            message: '这是一款用于查看《七日杀》地图的工具，\n支持官方地图、随机生成地图和服务器缓存地图.\n' +
+                     '当前版本支持七日杀1.0正式版.\n' +
+                     '开源：https://github.com/zzy-plus/7dmap\n' +
+                     '关注：https://space.bilibili.com/33779980\n' +
+                     '🐧🐧：2673926013\n',
+            buttons: ['知道了']
+            })
+        }
     },
     {
-        label: '😳搜索建筑(Ctrl+F)',
+        label: '🔍搜索建筑(Ctrl+F)',
         click: ()=> showSearchDlg(),
         accelerator: 'CmdOrCtrl+F'
+    },{
+        label: '遇到问题❓',
+        submenu: [
+            {
+                label: '使用教程',
+                click: ()=> execSync(`start ${guideUrl}`)
+            }
+        ]
     }
 ])
 
 let win
 const createWindow = ()=>{
     win = new BrowserWindow({
-        width: 1200,     //908
+        width: env === 'dev'? 1200: 908,     //908
         height: 775,
         backgroundColor: '#ffffff',
         resizable: false,
@@ -62,6 +74,17 @@ const createWindow = ()=>{
 
 app.whenReady().then(() => {
     createWindow()
+    http.get('http://47.115.46.223:8181/guide', (res) => {
+        let data = ''
+        res.on('data', (chunk) => {
+            data += chunk
+        })
+        res.on('end', () => {
+            guideUrl = data
+        });
+    }).on("error", (err) => {
+        console.log("Error: ", err.message)
+    });
 })
 
 const showSearchDlg = ()=>{
@@ -70,6 +93,12 @@ const showSearchDlg = ()=>{
 
 app.on('window-all-closed', () => {
     app.quit()
+})
+
+ipcMain.handle('event_get_env',()=>{
+    return new Promise((resolve,reject)=>{
+        resolve(env)
+    })
 })
 
 ipcMain.handle('event_get_worlds', ()=>{

@@ -5,7 +5,12 @@ import {useDataStore} from "@/stores"
 import {storeToRefs} from "pinia";
 
 const ipc = myApi.ipc
-const resPath = configs.env === 'dev' ? 'src/res/' : '../../../res/'
+let env = 'dev'
+let resPath = ''
+onMounted(async ()=>{
+  env = await ipc.invoke('event_get_env')
+  resPath = env === 'dev' ? 'src/res/' : '../../../res/'
+})
 const dataStore = useDataStore()
 
 const {selectedWorld} = storeToRefs(dataStore)  //确保不会丢失响应式
@@ -15,12 +20,6 @@ watch(selectedWorld, async (newVal) => {
   await getImgAndPoints(newVal)
 })
 
-// const {selectedPath} = storeToRefs(dataStore)
-// watch(selectedPath, async () => {
-//   if (!selectedPath.value) return
-//   resetContainer()
-//   await getImgAndPoints('path')
-// })
 
 const points = ref([])
 const mapInfo = ref(undefined)
@@ -82,6 +81,12 @@ const resetContainer = () => {
   imgSrc.value = undefined
   imgSrc2.value = undefined
   points.value = []
+  imgStyleObj.value = {
+    width: `${w.value}px`,
+    height: `${h.value}px`,
+    left: `${left.value}px`,
+    top: `${top.value}px`
+  }
 }
 
 const imgSrc = ref(undefined)
@@ -120,6 +125,12 @@ const onmousemove = (e) => {
         }
         left.value += e.movementX
         top.value += e.movementY
+        imgStyleObj.value = {
+          width: `${w.value}px`,
+          height: `${h.value}px`,
+          left: `${left.value}px`,
+          top: `${top.value}px`
+        }
         move_limited = undefined
       }, 3)
 
@@ -137,28 +148,17 @@ const onmouseup = () => {
   down.value = false
 }
 
-let scaleFactor = 1.0
-const styleObj = ref({
-  transform: `scale(${scaleFactor})`,
-  width: '600px',
-  height: '600px',
-  left: '0px',
-  top: '0px',
-  transition: 'transform 0.3s ease'
+const imgStyleObj = ref({
+  width: `${w.value}px`,
+  height: `${h.value}px`,
+  left: `${left.value}px`,
+  top: `${top.value}px`
 })
+
 const wheel = (e) => {
   if (!wheel_limited) {
     wheel_limited = setTimeout(() => {
       if (e.deltaY < -1) { //滚轮向上
-        scaleFactor += 0.5
-        styleObj.value = {
-          transform: `scale(${scaleFactor})`,
-          width: '600px',
-          height: '600px',
-          left: '0px',
-          top: '0px',
-          transition: 'transform 0.3s ease'
-        }
         w.value += zoomStep
         h.value += zoomStep
         left.value -= e.offsetX / w.value * zoomStep
@@ -171,25 +171,16 @@ const wheel = (e) => {
           top.value += e.offsetY / h.value * zoomStep
         }
       }
+      imgStyleObj.value = {
+        width: `${w.value}px`,
+        height: `${h.value}px`,
+        left: `${left.value}px`,
+        top: `${top.value}px`
+      }
       wheel_limited = undefined
-    }, 100)
+    }, 50)
   }
-
 }
-
-
-let timer = undefined
-const pointsVisible = ref(true)
-watch(w,()=>{
-  pointsVisible.value = false
-  if(timer){
-    clearTimeout(timer)
-  }
-  timer = setTimeout(()=>{
-    pointsVisible.value = true
-    timer = undefined
-  }, 200)
-})
 
 const computed_points = computed(() => {
   return filter_points.value.map(point => {
@@ -221,26 +212,26 @@ const onmouseenter = (e) => {
        @mousedown.prevent="onmousedown" @mouseup="onmouseup" @mousemove="onmousemove" @wheel="wheel">
     <el-image style="width: 600px; height: 600px" src="https://t.mwm.moe/fj" fit="cover" v-if="!imgSrc"/>
 
-    <!--:style="{width: w + 'px', height: h + 'px', left: left + 'px', top: top + 'px'}-->
-    <img v-bind:src="imgSrc" v-show="imgSrc"
+    <img v-bind:src="imgSrc" v-if="imgSrc"
          style="object-fit: fill; position: absolute; z-index: 1;"
-         :style="styleObj"
+         :style="imgStyleObj"
     />
 
-    <img v-bind:src="imgSrc2" v-show="imgSrc2"
+    <img v-bind:src="imgSrc2" v-if="imgSrc2"
          style="object-fit: fill; position: absolute; z-index: 2;"
-         :style="styleObj"
+         :style="imgStyleObj"
     />
 
 
-    <div ref="div1" style="position: absolute; z-index: 3" v-if="false"
-         :style="{width: w+'px', height: h+'px', left: left + 'px', top: top + 'px'}">
+    <div ref="div1" style="position: absolute; z-index: 3"
+         :style="imgStyleObj"
+    >
 
       <div
           v-for="(point, index) in computed_points"
           :key="index"
           :style="{position: 'absolute', width: point.size + 'px', height: point.size + 'px', zIndex: point.clazz,
-            backgroundColor: point.color, left: point.x - point.size/2 + 'px', top: point.y - point.size/2 + 'px'}"
+            backgroundColor: point.color, left: point.x + 'px', top: point.y - point.size + 'px'}"
           @mouseenter="onmouseenter"
           :text="point.id" :real_x="point.real_x" :real_y="point.real_y" :real_z="point.real_z"
       />
@@ -254,9 +245,6 @@ const onmouseenter = (e) => {
 canvas {
   border: 1px solid #000; /* 为了演示，添加一个边框 */
 }
-
-
-
 </style>
 
 

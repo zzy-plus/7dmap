@@ -1,13 +1,17 @@
 apartments_02,5,Vanity Tower,虚荣大厦
 apartments_06,5,Tow Bit Tower,双子塔
 apartment_brick_6_flr,5,Brick Apartment,6层砖房
+base_military_01,5,U.S. Army Post 7,7号美国陆军哨所
 factory_01,5,Shamway Factory,Shamway工厂
 factory_02,5,Shotgun Messiah Factory,Messiah霰弹枪工厂
-factory_03,5,Pop-N-Pills Factory,制药工厂
+factory_03,5,Pop-N-Pills Factory,Pop-N-Pills制药工厂
 factory_lg_01,5,Shamway Factory,大型Shamway工厂
 factory_lg_02,5,Shotgun Messiah Factory,大型Messiah霰弹枪工厂
+football_stadium,5,Navezgane Athletics Complex,Navezgane田径场
 hospital_01,5,Navezgane General Hospital,Navezgane综合医院
 hotel_ostrich,5,Ostrich Hotel,鸵鸟酒店
+hotel_02,5,Haven Hotel,避风港酒店
+hotel_03,5,7 Days Suites,7日公寓
 house_modern_23,5,Dr. Karen Higashi Residence,Karen Higashi博士住宅
 installation_red_mesa,5,Red Mesa Compound,Red Mesa化工厂
 nursing_home_01,5,The Last Sunset Nursing Home,夕阳疗养院
@@ -16,16 +20,21 @@ prison_02,5,Navezgane County Jail,Navezgane县监狱
 skyscraper_01,5,Dishong Tower,Dishong塔
 skyscraper_02,5,Crack-a-Book HQ,Crack-a-Book总部
 skyscraper_03,5,Higashi Pharmaceutical,东制药公司
+school_03,5,Grover High,Grover高中
+theater_stage_01,5,Minotaur Theater,牛头怪剧院
 apartments_01,4,Good Life Apartments,美好生活公寓
 army_camp_01,4,Fort Camo,1号军营
 army_camp_02,4,Fort Bags,2号军营
 army_camp_03,4,Fort Quonset,3号军营
 army_camp_05,4,Fort Choppa,5号军营
+army_camp_06,4,Goldrush Station,淘金热站
+army_camp_07,4,Installation Blue Ridge,蓝岭军营
 bowling_alley_01,4,Pineballs Bowling,Pineballs保龄球馆
 church_01,4,St. Moe's Cathedral,圣莫大教堂
 city_center_01,4,Olgiddy & Brother Advertising,奥吉迪兄弟广告公司
 countrytown_business_05,4,Butcher Pete's,屠夫皮特肉店
 courthouse_med_01,4,Town Hall,市政厅
+cave_09,4,Aranea Caverns,Aranea洞穴
 downtown_building_02,4,Pergola Apartments,凉亭公寓
 downtown_building_03,4,Stand Tower,支架塔楼
 downtown_strip_01,4,Flushing Rule Palace,法拉盛规则宫
@@ -39,6 +48,7 @@ downtown_strip_12,4,NFD Downtown HQ,NFD市中心总部
 farm_16,4,Judie Witch,朱迪女巫农场
 gas_station_05,4,Pass-N-Gas Store 05,PN加油站05
 hotel_01,4,Hotel Zombona,桑博纳酒店
+hotel_04,4,Calm Inn,静谧旅馆
 house_burnt_06,4,Seedy Manor,西迪庄园
 house_modern_18,4,Don Vittorio Spagetto Residence,唐-维斯住宅
 house_modern_24,4,Jeffelon Zuckergates Estate,杰弗隆-扎克盖茨庄园
@@ -56,6 +66,7 @@ roadside_checkpoint_04,4,NDC Checkpoint Four,NDC 4号检查站
 roadside_checkpoint_05,4,NDC Checkpoint Five,NDC 5号检查站
 rural_drive_in_01,4,Coleman's Drive-In,科尔曼汽车旅馆
 school_01,4,Navezgane High School,Navezgane高中
+school_02,4,Favales Academy,Favales学院
 skyscraper_04,4,Tower Construction Site,塔楼施工现场
 store_grocery_02,4,Super Shamway,超级山姆杂货店
 store_gun_01,4,Shotgun Messiah Range,弥赛亚霰弹枪靶场
@@ -63,6 +74,7 @@ store_gun_02,4,Close Encounters Gun Range,近身射击场
 store_hardware_03,4,Wasted Stiff's,废弃的五金店
 utility_electric_co_02,4,Hybrid Energy,混合能源电力公司
 utility_waterworks_01,4,Water Works,水厂
+utility_refinery_02,4,Pipeline Gas Co,管道燃气公司
 warehouse_01,4,OPS Logistics,OPS 物流中心
 warehouse_03,4,Infested Warehouse,进料仓库
 apartments_03,3,The Bend Apartments,班德公寓
@@ -114,6 +126,7 @@ house_modern_21,3,The Hellenes Residence,海伦斯住宅
 house_modern_26,3,The Last Party House,最后的聚会屋
 house_modern_27,3,Almeida Residence,阿尔梅达住宅
 house_modern_28,3,Pantelli Residence,潘泰利住宅
+house_modern_30,3,Towersley Estate,塔斯利庄园酒店
 house_old_bungalow_01,3,The Vaecon Residence,韦康住宅
 house_old_bungalow_11,3,Johnnytown,乔尼小屋
 house_old_gambrel_03,3,Bob's Boars & Carl's Corn,鲍勃的野猪和卡尔的玉米之家
@@ -123,7 +136,8 @@ house_old_modular_02,3,Bill Gearz Place,比尔-格尔茨旧屋
 house_old_pyramid_01,3,The D. Smith Residence,史密斯住宅
 house_old_pyramid_04,3,The Gully Residence,山沟住宅
 house_old_ranch_02,3,The Redchurch Residence,雷德丘奇住宅
-house_old_spanish_01,3,The Serrano Residence,塞拉诺住宅
+house_old_ranch_12,3,The McStab Residence,麦克斯塔特住宅
+house_old_ranch_13,3,The Serrano Residence,塞拉诺住宅
 house_old_tudor_06,3,The Rippon Residence,里彭住宅
 house_old_victorian_01,3,Taylor Manor,泰勒庄园
 house_old_victorian_04,3,The Neckarski Residence,内卡斯基住宅
@@ -163,6 +177,7 @@ warehouse_08,3,Johnson's Warehouses,约翰逊仓库
 weigh_station_01,3,Weston Weigh Station,韦斯顿称重站
 apartments_04,2,The Budget Burrows,拮据公寓
 auto_mechanic_01,2,A1 Auto,A1自动机械所
+apartments_05,2,Slummit Apartments,贫民公寓
 bank_01,2,Piggy Bank,小猪银行
 barn_02,2,Mason's Barn,梅森谷仓
 barn_03,2,Boar Barn Fields,野猪场
@@ -195,6 +210,7 @@ downtown_filler_13,2,Luigi's Pizza,路易吉披萨
 downtown_filler_14,2,Post Office Apartment,邮局公寓
 downtown_filler_15,2,Downtown Shamway,Shamway市中心
 downtown_parking_lot_01,2,Downtown Evacuation Point,市中心疏散点
+downtown_park_02,2,Federal Plaza,联邦广场
 farm_01,2,Jericho Ranch,杰里科牧场
 farm_03,2,Huenink Family Farms,Huenink家庭农场
 farm_04,2,Animal Hospital,动物医院
@@ -203,6 +219,7 @@ farm_08,2,Sweet Sweet Honey Pot Farms,甜蜜罐农场
 farm_10,2,Red Barn Bed-n-Bath,红色谷仓床
 farm_11,2,Smithstone Silos,Smithstone筒仓
 farm_14,2,Hersh Farm,赫什农场
+farm_17,2,McPherson UFO Museum,麦克弗森UFO博物馆
 fastfood_07,2,NEW Mamma Pizza,新妈妈披萨
 fire_station_01,2,Fire Station 7,消防站7
 fire_station_04,2,NFD Engine 4,NFD引擎4
@@ -362,7 +379,6 @@ fastfood_03,1,Blue Birdie,蓝色小鸟
 fastfood_04,1,Fats Foods,脂肪类食品
 fastfood_05,1,Beavers Restaurant,海狸餐厅
 fire_station_03,1,Fire Haus 01,1号火屋
-football_stadium,1,Navezgane Coliseum,Navezgane体育馆
 funeral_home_01,1,Am-I-Gone Funeral Home,Am-I-Gone殡仪馆
 gas_station_01,1,Pass-N-Gas Store 01,1号Pass-N-Gas商店
 gas_station_02,1,Pass-N-Gas Store 02,2号Pass-N-Gas商店
@@ -437,7 +453,9 @@ remnant_industrial_03,1,remnant_industrial_03,remnant_industrial_03
 remnant_industrial_04,1,remnant_industrial_04,remnant_industrial_04
 rest_area_03,1,Crotalus Rest Area,Crotalus休息区
 rest_area_04,1,Buy-N-Go Rest Stop,Buy-N-Go Rest Stop
+rwg_tile_cap,1,Cap,Cap
 school_daycare_01,1,Poopy Pants Country Daycare,Poopy Pants乡村日托
+store_book_04,1,Book Barn,谷仓
 store_electronics_01,1,MoPo-Shack,MoPo棚屋
 store_grocery_04,1,Moe's Grocery,莫的杂货店
 store_grocery_05,1,Boe's Market,Boe市场
@@ -588,6 +606,8 @@ lot_vacant_02,0,7 Hour Park,7小时停车
 lot_vacant_03,0,Hobo Camp,Hobo营地
 lot_vacant_04,0,Corona Wipes Billboard,Corona Wipes广告牌
 lot_vacant_06,0,Shady Dawgs,Shady Dawgs
+lot_vacant_07,0,Treehouse Treasures,宝藏树屋
+lot_vacant_08,0,The Shed,棚屋
 navezgane_waterfall_01,0,navezgane_waterfall_01,navezgane_waterfall_01
 office_07,0,office_07,office_07
 oldwest_business_05,0,Oil Tycoons,石油大亨

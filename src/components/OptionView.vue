@@ -9,14 +9,15 @@ const ipc = myApi.ipc
 const selected_world = ref(undefined)
 const onSelectedWorldChange = (newWorld) => {
   dataStore.setSelectedWorld(worlCollection[newWorld])
-
+  browsedWorld = false
 }
 
-
+let env = 'dev'
 const world_options = ref([])
 let worlCollection = null
-onMounted(()=>{
+onMounted(async ()=>{
   getWorlds(false)
+  env = await ipc.invoke('event_get_env')
 })
 
 const getWorlds = async (flag)=>{
@@ -62,7 +63,7 @@ const imgRef = ref('')
 const {curId} = storeToRefs(useDataStore())
 watch(curId,(newVal)=>{
   imgRef.value =
-      configs.env === 'dev'?
+      env === 'dev'?
           'src/res/pois/' + newVal + '.jpg'
           :
           '../../../res/pois/' + newVal + '.jpg'
@@ -74,28 +75,41 @@ const curModel = computed(()=>{
 })
 
 const onSave = ()=>{
-  if(!selected_world.value && !dataStore.selectedPath) return
+  if(!selected_world.value && !dataStore.selectedPath && !browsedWorld) return
+  if(isServerMap.value){
+    ElMessage({
+      type: 'error',
+      message: '服务器缓存地图暂不支持保存',
+    })
+    return;
+  }
   if(selected_world.value){
     ipc.invoke('event_save_img', {
       world: selected_world.value,
       points: JSON.stringify(dataStore.points),
       mapSize: dataStore.mapInfo.size
     })
-  }else {
+  }else if(dataStore.selectedPath){
     ipc.invoke('event_save_img', {
       world: dataStore.selectedPath,
       points: JSON.stringify(dataStore.points),
       mapSize: dataStore.mapInfo.size
     })
+  }else if(browsedWorld){
+    ElMessage({
+      type: 'error',
+      message: '手动选择地图暂不支持保存，后续会优化',
+    })
   }
 }
 
+let browsedWorld = false
 const browseWorld = async ()=>{
   const {status, data, msg} = await ipc.invoke('event_browse_world','')
   if(status){
     if(!data) return;
     dataStore.setSelectedWorld(data)
-
+    browsedWorld = true
     selected_world.value = null
   }else {
     ElMessage.error(msg)
@@ -126,7 +140,6 @@ watch(enableSelection,(newVal)=>{
     dataStore.setSelections(undefined)
   }
 })
-
 
 const isServerMap = ref(false)
 watch(isServerMap, (val)=>{
@@ -190,10 +203,10 @@ watch(isServerMap, (val)=>{
           class="box-item"
           effect="dark"
           content="勾选此选项后，下拉框中显示的世界均为从公共服务器下载的地图"
-          placement="bottom"
+          placement="left"
       >
         <el-checkbox v-model="isServerMap" label="服务器缓存地图"
-                     style="margin: 0; position: relative; left: -60px; color: #f5ab11" />
+                     style="margin: 0; position: relative; left: -60px; color: #f5ab11"/>
       </el-tooltip>
 
     </div>

@@ -18,6 +18,7 @@ watch(selectedWorld, async (newVal) => {
   if (!selectedWorld.value) return
   resetContainer()
   await getImgAndPoints(newVal)
+  canvasLoadImg()
 })
 
 
@@ -203,6 +204,30 @@ const onmouseenter = (e) => {
   })
 }
 
+const canvasLoadImg = ()=>{
+  let canvas = document.getElementById('img_canvas')
+  let ctx = canvas.getContext('2d')
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  let img1 = new Image()
+  let img2 = new Image()
+
+  img1.onload = function (){
+    ctx.drawImage(img1, 0, 0, canvas.width, canvas.height)
+  }
+  img2.onload = function (){
+    ctx.drawImage(img2, 0, 0, canvas.width, canvas.height)
+  }
+  img1.src = imgSrc.value
+  img2.src = imgSrc2.value
+}
+
+const tools = ['边框', '网格']
+const checkboxGroup = ref([])
+const change = (arr)=>{
+  console.log(arr)
+}
+
 
 </script>
 
@@ -210,18 +235,10 @@ const onmouseenter = (e) => {
   <div style=" background-color: #c9c9c9; border: 2px solid black; overflow: hidden; position: relative;"
        :style="{width: configs.containerWidth + 'px', height: configs.containerHeight + 'px'}"
        @mousedown.prevent="onmousedown" @mouseup="onmouseup" @mousemove="onmousemove" @wheel="wheel">
-    <el-image style="width: 600px; height: 600px" src="https://t.mwm.moe/fj" fit="cover" v-if="!imgSrc"/>
+<!--    <el-image style="width: 600px; height: 600px" src="https://t.mwm.moe/fj" fit="cover" v-if="!imgSrc"/>-->
 
-    <!-- 图片过大导致的缩放卡顿 -->
-<!--    <img v-bind:src="imgSrc" v-if="imgSrc"-->
-<!--         style="object-fit: fill; position: absolute; z-index: 1;"-->
-<!--         :style="imgStyleObj"-->
-<!--    />-->
-
-<!--    <img v-bind:src="imgSrc2" v-if="imgSrc2"-->
-<!--         style="object-fit: fill; position: absolute; z-index: 2;"-->
-<!--         :style="imgStyleObj"-->
-<!--    />-->
+    <canvas id="img_canvas" :width="configs.containerWidth" :height="configs.containerHeight"
+        :style="imgStyleObj" style="position: absolute"></canvas>
 
 
     <div ref="div1" style="position: absolute; z-index: 3"
@@ -232,11 +249,22 @@ const onmouseenter = (e) => {
           v-for="(point, index) in computed_points"
           :key="index"
           :style="{position: 'absolute', width: point.size + 'px', height: point.size + 'px', zIndex: point.clazz,
-            backgroundColor: point.color, left: point.x + 'px', top: point.y - point.size + 'px'}"
+            backgroundColor: point.color, left: point.x + 'px', top: point.y - point.size + 'px', borderRadius: '50%',
+            border: checkboxGroup.includes('边框')?'white 1px solid': '', boxSizing: 'content-box'}"
+
           @mouseenter="onmouseenter"
           :text="point.id" :real_x="point.real_x" :real_y="point.real_y" :real_z="point.real_z"
       />
     </div>
+
+  </div>
+
+  <div style="position:absolute; top: 5px; left: 5px; height: 100px; width: 100px; z-index: 10">
+    <el-checkbox-group v-model="checkboxGroup" size="small" @change="change" fill="#ffc815">
+      <el-checkbox-button v-for="item in tools" :label="item">
+        {{ item }}
+      </el-checkbox-button>
+    </el-checkbox-group>
 
   </div>
 

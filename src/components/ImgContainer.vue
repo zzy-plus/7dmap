@@ -13,10 +13,11 @@ onMounted(async ()=>{
 })
 const dataStore = useDataStore()
 
-const {selectedWorld} = storeToRefs(dataStore)  //确保不会丢失响应式
-watch(selectedWorld, async (newVal) => {
+const {selectedWorld} = storeToRefs(dataStore)  // 确保不会丢失响应式
+watch(selectedWorld, async (newVal) => {  // 初始化的位置
   if (!selectedWorld.value) return
   resetContainer()
+  removeMark()
   await getImgAndPoints(newVal)
   canvasLoadImg()
 })
@@ -63,7 +64,9 @@ const filter_points = computed(() => {
     const points_selected = []
     for (const point of points_filtered) {
       for (const selection of selections.value) {
-        if(point.id.startsWith(selection)){
+        if(point.id.includes(selection)){
+          points_selected.push(point)
+        }else if(point.name.toLowerCase().includes(selection)){
           points_selected.push(point)
         }
       }
@@ -286,9 +289,45 @@ watch(computed_points, ()=>{
   cleanGrid()
   setTimeout(()=>{
     drawGrid()
+    if(dataStore.mark != null){
+      markPoint(dataStore.mark)
+    }
   }, 20)
-
 })
+
+// 标记
+const {mark} = storeToRefs(dataStore)
+watch(mark, (newVal)=>{
+  if (newVal === null) return
+  markPoint(newVal)
+})
+
+const markPoint = (pos)=>{
+  const canvas = document.getElementById('mark')
+  const ctx = canvas.getContext('2d')
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+  const size = Number(dataStore.mapInfo.size)
+  const scale = canvas.width * 1.0 / size
+  ctx.strokeStyle = 'rgb(8,255,0)'
+  ctx.lineWidth = 5
+  // 横向网格
+  ctx.beginPath()
+  ctx.moveTo(0, pos[1] * scale)
+  ctx.lineTo(canvas.width, pos[1] * scale)
+  ctx.stroke()
+  //竖向网格
+  ctx.beginPath()
+  ctx.moveTo(pos[0] * scale, 0)
+  ctx.lineTo(pos[0] * scale, canvas.height)
+  ctx.stroke()
+}
+
+const removeMark = ()=>{
+  dataStore.setMark(null)
+  const canvas = document.getElementById('mark')
+  const ctx = canvas.getContext('2d')
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+}
 
 
 </script>
@@ -303,14 +342,14 @@ watch(computed_points, ()=>{
         :style="imgStyleObj" style="position: absolute"></canvas>
 
     <!-- 点 -->
-    <div ref="div1" style="position: absolute; z-index: 3"
+    <div ref="div1" style="position: absolute; z-index: 5"
          :style="imgStyleObj"
     >
       <div
           v-for="(point, index) in computed_points"
           :key="index"
           :style="{position: 'absolute', width: point.size + 'px', height: point.size + 'px', zIndex: point.clazz,
-            backgroundColor: point.color, left: point.x + 'px', top: point.y - point.size + 'px', borderRadius: '50%',
+            backgroundColor: point.color, left: point.x - point.size/2 + 'px', top: point.y - point.size/2 + 'px', borderRadius: '50%',
             border: checkboxGroup.includes('边框')?'white 1px solid': '', boxSizing: 'content-box'}"
 
           @mouseenter="onmouseenter"
@@ -321,16 +360,22 @@ watch(computed_points, ()=>{
     <!-- 网格 -->
     <canvas id="grid" :width="w" :height="h"
             :style="{left: `${left}px`, top: `${top}px`}" style="position: absolute; z-index: 2" v-show="gridShow"></canvas>
+    <canvas id="mark" :width="w" :height="h"
+            :style="{left: `${left}px`, top: `${top}px`}" style="position: absolute; z-index: 3" v-show="gridShow"></canvas>
 
   </div>
 
-  <div style="position:absolute; top: 5px; left: 5px; height: 100px; width: 100px; z-index: 10">
+  <!-- 工具栏 -->
+  <div style="position:absolute; top: 5px; left: 5px; height: 100px; width: 300px; z-index: 10;">
     <el-checkbox-group v-model="checkboxGroup" size="small" @change="change" fill="#ffc815">
       <el-checkbox-button v-for="item in tools" :label="item">
         {{ item }}
       </el-checkbox-button>
     </el-checkbox-group>
-
+    <el-button size="small" type="success" plain style="margin-top: 3px"
+              @click="removeMark">
+      清除标记
+    </el-button>
   </div>
 
 </template>

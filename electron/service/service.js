@@ -5,11 +5,11 @@ const xmljs = require('xml-js')
 
 const containerSize = 600
 const colors = {
-    '5': '#b431f8',
-    '4': '#ff0b0b',
-    '3': '#ffc815',
+    '5': '#ff00ff',
+    '4': '#ff0000',
+    '3': '#ffff00',
     '2': '#4426fc',
-    '1': '#11ff00',
+    '1': '#11ff10',
     '0': '#a1a1a1',
 }
 const sizes = {
@@ -43,8 +43,9 @@ const getPoints = async (xmlPath, resPath) => {
         const real_x = Number(position[0])
         const real_y = Number(position[2])
         const real_z = Number(position[1])
-        const init_x = (real_x + mapInfo.size / 2) / mapInfo.size * containerSize
-        const init_y = (mapInfo.size / 2 - real_y) / mapInfo.size * containerSize
+        const scale = containerSize / mapInfo.size
+        const init_x = (real_x + mapInfo.size / 2) * scale
+        const init_y = (mapInfo.size / 2 - real_y) * scale
         const x = init_x
         const y = init_y
         const name = jsonCSV[id].name

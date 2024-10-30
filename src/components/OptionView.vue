@@ -172,14 +172,22 @@ watch(isServerMap, (val)=>{
 
 
   <div style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; height: 400px;
-        position: relative; top: 0; ">
-    <div style="display: flex; justify-content: space-evenly; align-items: center;">
+        position: relative; top: 0;">
+    <div style="display: flex; justify-content: space-evenly; align-items: center; width: 100%">
+      <el-tooltip
+        content="识别到的地图会出现在下拉框中，直接选择即可；查看其它地图再使用手动选择"
+        effect="dark"
+        placement="top"
+        :hide-after="1"
+      >
+        <img src="@/assets/wenhao.png" style="height: 19px; width: 19px; object-fit: cover"/>
+      </el-tooltip>
       <el-select
           v-model="selected_world"
           class="m-2"
           placeholder="选择世界"
           size="default"
-          style="width: 170px"
+          style="width: 185px"
           @change="onSelectedWorldChange"
       >
         <el-option
@@ -191,7 +199,7 @@ watch(isServerMap, (val)=>{
       </el-select>
 
       <div>
-        <el-button type="warning" style="width: 75px; position: relative; left: 5px" @click="browseWorld">
+        <el-button type="warning" style="width: 75px;" @click="browseWorld">
           手动选择
         </el-button>
       </div>
@@ -204,6 +212,7 @@ watch(isServerMap, (val)=>{
           effect="dark"
           content="勾选此选项后，下拉框中显示的世界均为从公共服务器下载的地图"
           placement="left"
+          :hide-after="1"
       >
         <el-checkbox v-model="isServerMap" label="服务器缓存地图"
                      style="margin: 0; position: relative; left: -60px; color: #f5ab11"/>
@@ -225,9 +234,9 @@ watch(isServerMap, (val)=>{
       </el-checkbox>
       <el-checkbox v-model="classOptions['5']" style="margin: 5px">
         <template #default>
-          <el-tag effect="plain" type="success" :color="classOptions['5']? '#B431F8': '#ffffff'" size="large">
+          <el-tag effect="plain" type="success" :color="classOptions['5']? '#ff00ff': '#ffffff'" size="large">
             <template #default>
-              <div style="font-size: 14px; font-weight: bold" :style="{color: classOptions['5']? '#ffffff': '#B431F8'}">
+              <div style="font-size: 14px; font-weight: bold" :style="{color: classOptions['5']? '#ffffff': '#ff00ff'}">
                 --&nbsp;五级&nbsp;--
               </div>
             </template>
@@ -236,9 +245,9 @@ watch(isServerMap, (val)=>{
       </el-checkbox>
       <el-checkbox v-model="classOptions['4']" style="margin: 5px">
         <template #default>
-          <el-tag effect="plain" type="success" :color="classOptions['4']? '#ff0b0b': '#ffffff'" size="large">
+          <el-tag effect="plain" type="success" :color="classOptions['4']? '#ff0000': '#ffffff'" size="large">
             <template #default>
-              <div style="font-size: 14px; font-weight: bold" :style="{color: classOptions['4']? '#ffffff': '#ff0b0b'}">
+              <div style="font-size: 14px; font-weight: bold" :style="{color: classOptions['4']? '#ffffff': '#ff0000'}">
                 --&nbsp;四级&nbsp;--
               </div>
             </template>
@@ -247,9 +256,9 @@ watch(isServerMap, (val)=>{
       </el-checkbox>
       <el-checkbox v-model="classOptions['3']" style="margin: 5px">
         <template #default>
-          <el-tag effect="plain" type="success" :color="classOptions['3']? '#f3cd13': '#ffffff'" size="large">
+          <el-tag effect="plain" type="success" :color="classOptions['3']? '#ffff00': '#ffffff'" size="large">
             <template #default>
-              <div style="font-size: 14px; font-weight: bold" :style="{color: classOptions['3']? '#ffffff': '#f3cd13'}">
+              <div style="font-size: 14px; font-weight: bold" :style="{color: classOptions['3']? '#ffffff': '#ffff00'}">
                 --&nbsp;三级&nbsp;--
               </div>
             </template>
@@ -269,9 +278,9 @@ watch(isServerMap, (val)=>{
       </el-checkbox>
       <el-checkbox v-model="classOptions['1']" style="margin: 5px">
         <template #default>
-          <el-tag effect="plain" type="success" :color="classOptions['1']? '#32d527': '#ffffff'" size="large">
+          <el-tag effect="plain" type="success" :color="classOptions['1']? '#11ff10': '#ffffff'" size="large">
             <template #default>
-              <div style="font-size: 14px; font-weight: bold" :style="{color: classOptions['1']? '#ffffff': '#32d527'}">
+              <div style="font-size: 14px; font-weight: bold" :style="{color: classOptions['1']? '#ffffff': '#11ff10'}">
                 --&nbsp;一级&nbsp;--
               </div>
             </template>

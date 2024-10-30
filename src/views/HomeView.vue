@@ -19,7 +19,6 @@ myApi.ipcListen('e_search_dialog',(e, msg)=>{
 
 const getSearchData = async ()=>{
   const points = dataStore.points
-  console.log(points.length)
   const tempTableData = []
   for (const point of points) {
     if(point.name.toLowerCase().includes(modelName.value.toLowerCase())){
@@ -44,6 +43,18 @@ const getSearchData = async ()=>{
 
 }
 
+const onMark = (row)=>{
+  drawerVisible.value = false
+  // 计算坐标
+  const size = dataStore.mapInfo.size
+  const pattern = /\((-*\d+),(-*\d+),(-*\d+)\)/
+  const match = pattern.exec(row.position)
+  const left = size / 2 + Number(match[1])
+  const top = size / 2 - Number(match[2])
+  const pos = [left, top]
+  dataStore.setMark(pos)
+}
+
 </script>
 
 
@@ -52,7 +63,7 @@ const getSearchData = async ()=>{
   <el-drawer
       v-model="drawerVisible"
       direction="rtl"
-      size="60%"
+      size="65%"
       :with-header="false"
   >
 
@@ -74,6 +85,13 @@ const getSearchData = async ()=>{
         <el-table-column prop="id" label="代码" width="100"/>
         <el-table-column prop="clazz" label="等级" width="40"/>
         <el-table-column prop="position" label="位置(x,y,z)" width="130"/>
+        <el-table-column label="操作">
+          <template #default="scope">
+            <el-button size="small" @click="onMark(scope.row)">
+              标记
+            </el-button>
+          </template>
+        </el-table-column>
       </el-table>
 
     </template>

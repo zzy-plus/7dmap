@@ -12,7 +12,7 @@ const env = app.isPackaged? '': 'dev'
 const userhome = os.homedir()
 const gWorldPath = userhome + '\\AppData\\Roaming\\7DaysToDie\\GeneratedWorlds\\'
 const savesLocalPath = userhome + '\\AppData\\Roaming\\7DaysToDie\\SavesLocal'
-let guideUrl = 'www.baidu.com'
+let guideUrl = 'http://baidu.com'
 
 const mainMenu = Menu.buildFromTemplate([
     {
@@ -48,7 +48,7 @@ const mainMenu = Menu.buildFromTemplate([
 let win
 const createWindow = ()=>{
     win = new BrowserWindow({
-        width: env === 'dev'? 1200: 908,     //908
+        width: env === 'dev'? 908: 908,     //908
         height: 775,
         backgroundColor: '#ffffff',
         resizable: false,
@@ -63,7 +63,7 @@ const createWindow = ()=>{
 
     if (env === 'dev') {
         win.loadURL('http://localhost:5173/')
-        win.webContents.openDevTools()
+        //win.webContents.openDevTools()
     } else {
         win.loadFile('dist/index.html')
         //win.webContents.openDevTools()
@@ -80,7 +80,7 @@ app.whenReady().then(() => {
             data += chunk
         })
         res.on('end', () => {
-            guideUrl = data
+            guideUrl = data.split('?')[0]
         });
     }).on("error", (err) => {
         console.log("Error: ", err.message)

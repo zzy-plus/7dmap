@@ -9,8 +9,8 @@ export default {
         'store_pharmacy': '药房',
         'remnant_business_02': '诊所',
         'house_old_gambrel_03': '超级玉米(猪王房)',
-        'skyscraper_02': '5级图书大楼',
-        'store_book': '书店',
-        'store_gun': '枪店'
+        'book': '书店',
+        'gun': '枪店',
+        'laundry': '洗衣店'
     }
 }

@@ -61,6 +61,11 @@ export const useDataStore = defineStore('data', () => {
     selections.value = newVal
   }
 
+  const mark = ref(null)
+  const setMark = (val)=>{
+    mark.value = val
+  }
+
 
 
 
@@ -82,7 +87,9 @@ export const useDataStore = defineStore('data', () => {
     curPos,
     setCurPos,
     selections,
-    setSelections
+    setSelections,
+    mark,
+    setMark
 
   }
 })

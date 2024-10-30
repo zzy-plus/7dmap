@@ -823,3 +823,92 @@ departure_bridge_2,0,departure_bridge_2,departure_bridge_2
 downtown_park_01,0,downtown_park_01,downtown_park_01
 downtown_park_03,0,downtown_park_03,downtown_park_03
 lot_rural_filler_12,0,lot_rural_filler_12,lot_rural_filler_12
+lot_rural_filler_13,0,lot_rural_filler_13,lot_rural_filler_13
+lot_rural_filler_14,0,lot_rural_filler_14,lot_rural_filler_14
+lot_vacant_09,0,lot_vacant_09,空地
+perishton_bridge,0,perishton_bridge,桥
+remnant_carwash_02,0,24H Laundry,24小时洗衣店*
+remnant_coffee_shop_01,0,Drive-Up Coffee,免下车咖啡店*
+remnant_coffee_shop_02,0,Quick Cup Coffee,'来一杯'咖啡店*
+remnant_coffee_shop_03,0,remnant_coffee_shop_03,尖房顶咖啡店*
+remnant_downtown_filler_04,0,IVant Insurance,IVant保险公司*
+remnant_downtown_filler_19,0,Red Tomato,红番茄*
+remnant_downtown_filler_20,0,LUX,LUX商店*
+remnant_downtown_filler_21,0,Pete's Grill,Pete烧烤店
+remnant_downtown_filler_22,0,Delivery Center,交付中心
+remnant_downtown_filler_23,0,Booze Vault,酒库
+remnant_downtown_filler_24,0,800,800
+remnant_downtown_filler_25,0,Pet Shop,宠物商店
+remnant_downtown_filler_26,0,Pizza & Burger,披萨汉堡店
+remnant_downtown_filler_27,0,remnant_downtown_filler_27,烂尾楼
+remnant_downtown_filler_28,0,Mr CHD's Laundry Mat,CHD洗衣店
+remnant_downtown_strip_01,0,AZ Sport,AZ体育馆
+remnant_downtown_strip_02,0,66 Tavern -- Tex,小吃街
+remnant_downtown_strip_03,0,Will Tronics & Le Bistro,Will Tronics & Le Bistro
+remnant_downtown_strip_04,0,Chad Z Chaps & 77 Soft,Chad Z Chaps & 77 Soft
+remnant_downtown_strip_05,0,Gills Grocery -- ZBrews,Gills Grocery -- ZBrews
+remnant_downtown_strip_06,0,800,800
+remnant_downtown_strip_07,0,Tim's,Tim's
+remnant_downtown_strip_08,0,Urban Style Shops,都市风格商店
+remnant_downtown_strip_09,0,DJ,DJ
+remnant_downtown_strip_11,0,remnant_downtown_strip_11,拆迁楼
+remnant_downtown_strip_12,0,BooKoffee,书咖
+remnant_downtown_strip_13,0,TV Audio,电视音响店
+remnant_downtown_strip_14,0,Melt Downs,Melt Downs
+remnant_downtown_strip_15,0,L Flowers,花店
+remnant_downtown_strip_16,0,remnant_downtown_strip_16,remnant_downtown_strip_16
+remnant_downtown_strip_17,0,Joy Cup,Joy Cup
+remnant_downtown_strip_18,0,Bus Terminal 8,巴士总站8
+remnant_downtown_strip_19,0,Blue Clover Hotel,蓝色三叶草酒店
+remnant_downtown_strip_20,0,remnant_downtown_strip_20,remnant_downtown_strip_20
+remnant_hospital_01,0,Hospital,废旧医院
+remnant_house_19,0,remnant_house_19,房屋19
+remnant_library_01,0,800 Library,800图书馆
+remnant_library_02,0,remnant_library_02,图书店
+remnant_lot_industrial_01,0,A Dot,工业园
+remnant_quicklube_01,0,Fast Lube,润滑油店
+remnant_school_01,0,School,学校
+remnant_selfstorage_01,0,A1 Self Storage,A1 自助仓
+remnant_selfstorage_02,0,Top Storage,Top 仓库
+remnant_skyscraper_02,0,remnant_skyscraper_02,尖塔摩天楼
+remnant_skyscraper_03,0,remnant_skyscraper_03,remnant_skyscraper_03
+remnant_skyscraper_04,0,remnant_skyscraper_04,remnant_skyscraper_04
+remnant_skyscraper_05,0,remnant_skyscraper_05,remnant_skyscraper_05
+trailer_05,0,trailer_05,车厢房05
+trailer_06,0,trailer_06,车厢房06
+trailer_07,0,trailer_07,车厢房07
+trailer_08,0,trailer_08,车厢房08
+trailer_09,0,trailer_09,车厢房09
+trailer_10,0,trailer_10,车厢房10
+trailer_11,0,trailer_11,车厢房11
+trailer_12,0,trailer_12,车厢房12
+wilderness_filler_12,0,wilderness_filler_12,野外信号站
+wilderness_filler_13,0,wilderness_filler_13,水淹小屋
+wilderness_filler_15,0,wilderness_filler_15,露营地
+wilderness_filler_16,0,wilderness_filler_16,盗墓者
+wilderness_filler_17,0,wilderness_filler_17,废弃汽车
+wilderness_filler_19,0,wilderness_filler_19,埋尸坑
+wilderness_filler_20,0,wilderness_filler_20,wilderness_filler_20
+wilderness_filler_21,0,wilderness_filler_21,wilderness_filler_21
+lot_rural_filler_15,0,lot_rural_filler_15,lot_rural_filler_15
+lot_rural_filler_16,0,lot_rural_filler_16,lot_rural_filler_16
+lot_rural_filler_17,0,lot_rural_filler_17,lot_rural_filler_17
+lot_rural_filler_18,0,lot_rural_filler_18,lot_rural_filler_18
+lot_rural_filler_19,0,lot_rural_filler_19,lot_rural_filler_19
+lot_rural_filler_20,0,lot_rural_filler_20,lot_rural_filler_20
+lot_rural_filler_21,0,lot_rural_filler_21,lot_rural_filler_21
+lot_rural_filler_22,0,lot_rural_filler_22,lot_rural_filler_22
+lot_rural_filler_23,0,lot_rural_filler_23,lot_rural_filler_23
+lot_rural_filler_24,0,lot_rural_filler_24,lot_rural_filler_24
+lot_rural_filler_25,0,lot_rural_filler_25,lot_rural_filler_25
+lot_rural_filler_26,0,lot_rural_filler_26,lot_rural_filler_26
+lot_rural_filler_27,0,lot_rural_filler_27,lot_rural_filler_27
+lot_rural_filler_28,0,lot_rural_filler_28,lot_rural_filler_28
+lot_rural_filler_29,0,lot_rural_filler_29,lot_rural_filler_29
+lot_rural_filler_30,0,lot_rural_filler_30,lot_rural_filler_30
+rwg_tile_corner,0,rwg_tile_corner,rwg_tile_corner
+rwg_tile_intersection,0,rwg_tile_intersection,rwg_tile_intersection
+rwg_tile_straight,0,rwg_tile_straight,rwg_tile_straight
+rwg_tile_t,0,rwg_tile_t,rwg_tile_t
+wilderness_filler_05,0,wilderness_filler_05,wilderness_filler_05
+wilderness_filler_18,0,wilderness_filler_18,wilderness_filler_18

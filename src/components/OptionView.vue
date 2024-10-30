@@ -7,8 +7,8 @@ import configs from "@/configs"
 const dataStore = useDataStore()
 const ipc = myApi.ipc
 const selected_world = ref(undefined)
-const onSelectedWorldChange = (newWorld) => {
-  dataStore.setSelectedWorld(worlCollection[newWorld])
+const onSelectedWorldChange = (worldPath) => {
+  dataStore.setSelectedWorld(worldPath)
   browsedWorld = false
 }
 
@@ -27,13 +27,13 @@ const getWorlds = async (flag)=>{
    */
   let status, data, msg
   if(flag){
-    ({status, data, msg} = await ipc.invoke('event_get_server_worlds',''))
+    ({status, data, msg} = await ipc.invoke('event_get_server_worlds'))
   }else {
-    ({status, data, msg} = await ipc.invoke('event_get_worlds',''))
+    ({status, data, msg} = await ipc.invoke('event_get_worlds'))
   }
   if (status){
     worlCollection = data
-    world_options.value = Object.keys(data)
+    world_options.value = Object.keys(data).map((key)=>{return {label: key, value: data[key]}})
   }else {
     ElMessage({
       type: 'error',
@@ -184,9 +184,9 @@ watch(isServerMap, (val)=>{
       >
         <el-option
             v-for="item in world_options"
-            :key="item"
-            :label="item"
-            :value="item"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
         />
       </el-select>
 

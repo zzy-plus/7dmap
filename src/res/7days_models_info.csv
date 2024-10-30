@@ -92,6 +92,7 @@ countrytown_business_08,3,Wildfire Camping,野火露营商店
 countrytown_business_09,3,4 Ever Video,4 Ever视频
 countrytown_business_11,3,Midway Clinic,中途诊所
 countrytown_business_12,3,Jim & Tim's Bullets and Booze,吉姆和蒂姆的子弹与烈酒
+countrytown_business_15,3,countrytown_business_15,带停车场的方形建筑*
 country_junkyard_02,3,Atlas Metal Co.,阿特拉斯金属公司
 diner_07,3,Navezgane Falls Diner,Navezgane瀑布餐厅
 docks_03,3,Haulwell Freight Co.,豪威尔货运公司
@@ -812,3 +813,13 @@ wilderness_filler_09,0,Flesh Feast Falls,肉宴瀑布
 wilderness_filler_10,0,The Mush Pit,蘑菇坑
 wilderness_filler_11,0,Pump Substation,泵站
 wilderness_filler_14,0,Alpha Den,Alpha Den
+abandoned_house_10,0,abandoned_house_10,废弃房屋10
+army_camp_08,0,army_camp_08,营地08
+bridge_concrete_1,0,bridge_concrete_1,bridge_concrete_1
+bridge_concrete_2,0,bridge_concrete_2,bridge_concrete_2
+canyon_gift_shop_parking,0,canyon_gift_shop_parking,canyon_gift_shop_parking
+departure_bridge_1,0,departure_bridge_1,departure_bridge_1
+departure_bridge_2,0,departure_bridge_2,departure_bridge_2
+downtown_park_01,0,downtown_park_01,downtown_park_01
+downtown_park_03,0,downtown_park_03,downtown_park_03
+lot_rural_filler_12,0,lot_rural_filler_12,lot_rural_filler_12

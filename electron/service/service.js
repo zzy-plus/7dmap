@@ -25,6 +25,12 @@ const sizes = {
 const getPoints = async (xmlPath, resPath) => {
 
     const {models, mapInfo} = parseXmlFiles(xmlPath)
+    const parts = xmlPath.split('\\')
+    if(xmlPath.includes('SavesLocal')){
+        mapInfo['name'] = parts[parts.length - 2]
+    }else {
+        mapInfo['name'] = parts[parts.length - 1]
+    }
 
     const jsonCSV = await parseCSV(resPath)
 

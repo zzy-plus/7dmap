@@ -5,10 +5,6 @@ import {ref, computed} from "vue";
 
 
 const {mapInfo} = storeToRefs(useDataStore())
-const mapName = computed(()=>{
-  return mapInfo.value.name.split('\\').slice(-1)[0]
-})
-
 const {curPos} = storeToRefs(useDataStore())
 
 
@@ -28,7 +24,7 @@ const {curPos} = storeToRefs(useDataStore())
       <div style="display: flex; justify-content: space-evenly; width: 600px;
            font-size: 14px;  color: #ff8437; margin-top: 5px">
         <div style="font-weight: bold">
-          世界名称：{{mapName}}
+          世界名称：{{mapInfo.name}}
         </div>
         <div style="font-weight: bold">
           大小：{{mapInfo.size}}&nbsp;x&nbsp;{{mapInfo.size}}
@@ -37,10 +33,10 @@ const {curPos} = storeToRefs(useDataStore())
       <div style="display: flex; justify-content: space-evenly; width: 600px;
            font-size: 14px; color: #ff8437; margin-top: 5px">
         <div style="font-weight: bold">
-          版本：{{mapInfo.version}}
+          版本：{{mapInfo.version?mapInfo.version: '未知'}}
         </div>
         <div style="font-weight: bold">
-          种子：{{mapInfo.seed}}
+          种子：{{mapInfo.seed? mapInfo.seed: '未知'}}
         </div>
       </div>
 

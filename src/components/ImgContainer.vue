@@ -28,31 +28,29 @@ const loadedWorlds = []
 const loadedPointsData = {}
 const getImgAndPoints = async (worldPath) => {
 
+  // 获取图片
   const res = await ipc.invoke('event_get_img', worldPath)
-
   imgSrc.value = res.data.biomes? `data:image/jpeg;base64,${res.data.biomes}`: undefined
   imgSrc2.value = res.data.splat3? `data:image/jpeg;base64,${res.data.splat3}`: undefined
 
+  // 判断这个世界是否请求过
   if (loadedWorlds.includes(worldPath)) {
-
     points.value = loadedPointsData[worldPath].points
     dataStore.setMapInfo(loadedPointsData[worldPath].mapInfo)
     dataStore.setJsonCSV(loadedPointsData[worldPath].jsonCSV)
   } else {
-
     const {status, data, msg} = await ipc.invoke('event_get_points', worldPath)
     points.value = data.points
-    dataStore.setMapInfo({...data.info, name: worldPath})
+    dataStore.setMapInfo(data.info)
     dataStore.setJsonCSV(data.jsonCSV)
     loadedWorlds.push(worldPath)
     loadedPointsData[worldPath] = {
       points: points.value,
-      mapInfo: {...data.info, name: worldPath},
+      mapInfo: data.info,
       jsonCSV: data.jsonCSV
     }
   }
   dataStore.setPoints(points.value)
-
 }
 
 const {classOptions} = storeToRefs(dataStore)
@@ -97,7 +95,6 @@ const w = ref(configs.containerWidth)
 const h = ref(configs.containerHeight)
 const left = ref(0)
 const top = ref(0)
-const zoomStep = configs.zoomStep
 const div1 = ref(null)
 const down = ref(false)
 
@@ -159,6 +156,12 @@ const imgStyleObj = ref({
 const wheel = (e) => {
   if (!wheel_limited) {
     wheel_limited = setTimeout(() => {
+      let zoomStep
+      if(w.value < 1000){
+        zoomStep = configs.zoomStep
+      }else {
+        zoomStep = 200
+      }
       if (e.deltaY < -1) { //滚轮向上
         w.value += zoomStep
         h.value += zoomStep
@@ -223,10 +226,69 @@ const canvasLoadImg = ()=>{
 }
 
 const tools = ['边框', '网格']
-const checkboxGroup = ref([])
+const checkboxGroup = ref(['网格'])
+const gridShow = ref(true)
 const change = (arr)=>{
-  console.log(arr)
+  gridShow.value = arr.includes('网格')
 }
+
+const drawGrid = ()=>{
+  const canvas = document.getElementById('grid')
+  const ctx = canvas.getContext('2d')
+  // 获取地图大小
+  const size = Number(dataStore.mapInfo.size)
+  const center = size / 2
+  const scale = canvas.width * 1.0 / size
+
+  for(let offset=0; offset <= center; offset += 1024){
+    if(offset === 0){
+      // 横向网格
+      ctx.strokeStyle = 'rgba(255,39,115,0.93)'
+      ctx.beginPath()
+      ctx.moveTo(0, center * scale)
+      ctx.lineTo(canvas.width, center * scale)
+      ctx.stroke()
+      //竖向网格
+      ctx.beginPath()
+      ctx.moveTo(center * scale, 0)
+      ctx.lineTo(center * scale, canvas.height)
+      ctx.stroke()
+    }
+    else{
+      ctx.strokeStyle = 'rgba(192,218,112,0.59)'
+      // 横向网格
+      ctx.beginPath()
+      ctx.moveTo(0, (center + offset) * scale)
+      ctx.lineTo(canvas.width, (center + offset) * scale)
+      ctx.moveTo(0, (center - offset) * scale)
+      ctx.lineTo(canvas.width, (center - offset) * scale)
+      ctx.stroke()
+      //竖向网格
+      ctx.beginPath()
+      ctx.moveTo((center + offset) * scale, 0)
+      ctx.lineTo((center + offset) * scale, canvas.height)
+      ctx.moveTo((center - offset) * scale, 0)
+      ctx.lineTo((center - offset) * scale, canvas.height)
+      ctx.stroke()
+    }
+
+
+  }
+}
+
+const cleanGrid = ()=>{
+  const canvas = document.getElementById('grid')
+  const ctx = canvas.getContext('2d')
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+}
+
+watch(computed_points, ()=>{
+  cleanGrid()
+  setTimeout(()=>{
+    drawGrid()
+  }, 20)
+
+})
 
 
 </script>
@@ -240,11 +302,10 @@ const change = (arr)=>{
     <canvas id="img_canvas" :width="configs.containerWidth" :height="configs.containerHeight"
         :style="imgStyleObj" style="position: absolute"></canvas>
 
-
+    <!-- 点 -->
     <div ref="div1" style="position: absolute; z-index: 3"
          :style="imgStyleObj"
     >
-
       <div
           v-for="(point, index) in computed_points"
           :key="index"
@@ -256,6 +317,10 @@ const change = (arr)=>{
           :text="point.id" :real_x="point.real_x" :real_y="point.real_y" :real_z="point.real_z"
       />
     </div>
+
+    <!-- 网格 -->
+    <canvas id="grid" :width="w" :height="h"
+            :style="{left: `${left}px`, top: `${top}px`}" style="position: absolute; z-index: 2" v-show="gridShow"></canvas>
 
   </div>
 

@@ -336,7 +336,7 @@ const removeMark = ()=>{
   <div style=" background-color: #c9c9c9; border: 2px solid black; overflow: hidden; position: relative;"
        :style="{width: configs.containerWidth + 'px', height: configs.containerHeight + 'px'}"
        @mousedown.prevent="onmousedown" @mouseup="onmouseup" @mousemove="onmousemove" @wheel="wheel">
-<!--    <el-image style="width: 600px; height: 600px" src="https://t.mwm.moe/fj" fit="cover" v-if="!imgSrc"/>-->
+    <el-image style="width: 600px; height: 600px" src="https://t.mwm.moe/fj" fit="cover" v-if="!imgSrc"/>
 
     <canvas id="img_canvas" :width="configs.containerWidth" :height="configs.containerHeight"
         :style="imgStyleObj" style="position: absolute"></canvas>

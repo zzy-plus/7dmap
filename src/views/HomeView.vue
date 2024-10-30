@@ -87,7 +87,7 @@ const onMark = (row)=>{
         <el-table-column prop="position" label="位置(x,y,z)" width="130"/>
         <el-table-column label="操作">
           <template #default="scope">
-            <el-button size="small" @click="onMark(scope.row)">
+            <el-button size="small" type="success" @click="onMark(scope.row)">
               标记
             </el-button>
           </template>
